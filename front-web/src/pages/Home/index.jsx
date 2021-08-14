@@ -1,24 +1,23 @@
-
-import './App.css';
+import Footer from "../../components/Footer";
+import NavBar from "../../components/NavBar";
+import "./App.css";
 
 function Home() {
   return (
-    <div className="App">
-      <header className="App-header">
-     
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <NavBar />
+      <div className="container">
+        <div className="d-flex align-items-start">
+          <h2 className="">Faça o Upload de arquivos VCF: </h2>
+          <button className="btn btn-primary btn-lg">Upload</button>
+        </div>
+        <div>
+          <h2>VCFs de Exemplo</h2>
+        </div>
+       
+      </div>
+      <Footer />
+    </>
   );
 }
 
