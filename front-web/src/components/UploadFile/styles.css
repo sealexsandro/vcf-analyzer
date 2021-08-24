@@ -1,0 +1,58 @@
+.uploadFile{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+input[type="file"]{
+    display: none;
+}
+
+#labelInput{
+    
+    padding: 20px 10px;
+    width: 300px;
+    background: #333;
+    color: #FFF;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: .5s;
+    border: 1px solid #333;
+    border-radius: 5px;
+
+}
+#labelInput:hover{
+    color: #333;
+    background: rgb(109, 109, 109);
+}
+
+.divCardUpload{
+    width: 300px;
+}
+
+.divButaoDesativado{
+    display: none;
+}
+
+.butaoUpload{
+    font-size: 15pt;
+}
+
+.divProgressBar{
+    /* display: none; */
+    border-top: 10px;
+}
+
+.divNomeArquivo{
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+.alert{
+    font-size: 15pt;
+}
