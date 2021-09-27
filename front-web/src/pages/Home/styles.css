@@ -1,6 +1,11 @@
-.container{
+.container-uploadPage{
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
+}
+
+.div-upload{
+  margin-top: 1rem;
 }
 .App {
   text-align: center;

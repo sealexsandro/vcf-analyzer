@@ -1,0 +1,23 @@
+
+.collumn-filter{
+  margin-right: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.container-filters {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 5px;
+}
+.filter-text{
+  font-size: 15pt;
+}
+
+.button-add-filter{
+  margin-top: 0px;
+}

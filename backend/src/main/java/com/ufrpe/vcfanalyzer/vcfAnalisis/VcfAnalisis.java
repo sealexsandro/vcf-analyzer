@@ -9,16 +9,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.ufrpe.vcfanalyzer.model.TagHeader;
-import com.ufrpe.vcfanalyzer.model.Variant;
-import com.ufrpe.vcfanalyzer.model.FileVcfData;
+import com.ufrpe.vcfanalyzer.domain.FileVcfData;
+import com.ufrpe.vcfanalyzer.domain.TagHeader;
+import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.utils.VariantToken;
 
 @Component
 public class VcfAnalisis {
 
 	private FileVcfData vcfFileData;
-	private int numeroDeColunas = 0;
+//	private int numeroDeColunas = 0;
 	private List<String> columnSamples = new ArrayList<String>();
 
 	public VcfAnalisis() {
@@ -30,7 +30,7 @@ public class VcfAnalisis {
 		List<String> fileVcf = null; // todo o arquivo será colocado nesta lista
 
 		if (stream != null) {
-			StringBuilder sb = new StringBuilder();
+		//	StringBuilder sb = new StringBuilder();
 			String line;
 			fileVcf = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class VcfAnalisis {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 				while ((line = reader.readLine()) != null) {
 					fileVcf.add(line);
-					sb.append(line).append("\n");
+				//	sb.append(line).append("\n");
 				}
 			} finally {
 				stream.close();
@@ -74,7 +74,7 @@ public class VcfAnalisis {
 					String columnHeader[] = row.split("\t");
 					for (int i = 0; i < columnHeader.length; i++) {
 //						this.vcfFileData.addColumnHeader(columnHeader[i]);
-						this.numeroDeColunas++;
+//						this.numeroDeColunas++;
 						this.columnSamples.add(columnHeader[i]);
 					}
 					isfinalLine = true;
@@ -85,7 +85,7 @@ public class VcfAnalisis {
 
 		// Pegar Os Dados Do Corpo que não Fazem Parte Do Cabeçalho
 		for (int i = indice; i < vcfFile.size(); i++) {
-			String bodyRow = vcfFile.get(indice);
+			String bodyRow = vcfFile.get(i);
 			Variant variant = this.montarRowData(bodyRow);
 			if (variant != null) {
 				this.vcfFileData.addBodyRow(variant);
@@ -137,7 +137,7 @@ public class VcfAnalisis {
 		Double quality = 0D;
 //		Map<String, String> infoCol = new HashMap<String, String>();
 //		Map<String, String> samples = new HashMap<String, String>();
-		List<String> infoCol = new ArrayList<>();
+		String infoCol = "";
 		List<String> samples = new ArrayList<>();
 
 		for (int coluna = 0; coluna < VariantToken.tokens.length; coluna++) {
@@ -156,24 +156,22 @@ public class VcfAnalisis {
 			} else if (coluna == 6) {
 				filter = rowData[coluna];
 			} else if (coluna == 7) {
-				String metaInformacoes[] = rowData[coluna].split(";");
-				for (int j = 0; j < metaInformacoes.length; j++) {
-//					String metaDado[] = metaInformacoes[j].split("=");
-//					infoCol.put(metaDado[0], metaDado[1]);
-					infoCol.add(metaInformacoes[j]);
-				}
+				infoCol = rowData[coluna];
+//				String metaInformacoes[] = rowData[coluna].split(";");
+//				for (int j = 0; j < metaInformacoes.length; j++) {
+////					String metaDado[] = metaInformacoes[j].split("=");
+////					infoCol.put(metaDado[0], metaDado[1]);
+//					infoCol.add(metaInformacoes[j]);
+//				}
 			} else if (coluna == 8) {
 				format = rowData[coluna];
 			} else {
-				int indiceColunaSamples = 0;
 				for (int colunaSamples = coluna; colunaSamples < rowData.length; colunaSamples++) {
 					if (!rowData[colunaSamples].equals(".")) {
-//						samples.put(this.columnSamples.get(indiceColunaSamples), rowData[colunaSamples]);
-						String sample = this.columnSamples.get(indiceColunaSamples) +":"+rowData[colunaSamples];
+					//	samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
+						String sample = this.columnSamples.get(colunaSamples) + "===" + rowData[colunaSamples];
 						samples.add(sample);
-						
 					}
-					indiceColunaSamples++;
 
 				}
 

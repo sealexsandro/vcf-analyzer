@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UploadFileService from "../../services/upload-vcf";
 import "./styles.css";
+import { Redirect } from "react-router-dom";
 
 export const UploadFile = () => {
   const [selectedFiles, setSelectedFiles] = useState("");
@@ -10,6 +11,7 @@ export const UploadFile = () => {
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("");
   // const [fileInfos, setFileInfos] = useState([]);
+  const [redirect, setRedirect] = useState(false);
 
   const selectFile = (event) => {
     message && setMessage("");
@@ -19,27 +21,33 @@ export const UploadFile = () => {
 
   const upload = () => {
     let currentFile = selectedFiles[0];
-    setValueInput('');
+    setValueInput("");
     setProgress(0);
     setCurrentFile(currentFile);
-    
+
     UploadFileService.upload(currentFile, (event) => {
       setProgress(Math.round((100 * event.loaded) / event.total));
     })
       .then((response) => {
         setMessage(response.data.message);
-        return;
+        // setTimeout(() => {
+        //   setRedirect(true);
+        // }, 1000);
+        setRedirect(true);
       })
       .catch(() => {
         setProgress(0);
         setMessage("Não foi possivel fazer o upload!");
-        setCurrentFile(undefined);
+        setCurrentFile("");
         setSelectedFiles("");
       });
 
     setSelectedFiles("");
   };
 
+  const redirectPage = () => {
+    return <Redirect path to="/dashboard" />;
+  };
   return (
     <div className="d-flex flex-column justify-content-center">
       <div>
@@ -51,8 +59,8 @@ export const UploadFile = () => {
           onChange={selectFile}
           accept="text/x-vcard"
           id="arquivoVcf"
-          value = {valueInput}
-          />
+          value={valueInput}
+        />
       </div>
 
       {/* <div className="d-flex justify-content-center"> */}
@@ -63,7 +71,9 @@ export const UploadFile = () => {
             <div className="divButaoUpload">
               <button
                 className={
-                  selectedFiles ? "btn btn-success butaoUpload" : "butaoDesativado"
+                  selectedFiles
+                    ? "btn btn-success butaoUpload"
+                    : "butaoDesativado"
                 }
                 onClick={upload}
               >
@@ -94,6 +104,7 @@ export const UploadFile = () => {
       <div className="alert alert-light" role="alert">
         {message}
       </div>
+      {redirect && redirectPage()}
 
       {/* <div className="card">
         <div className="card-header">List of Files</div>

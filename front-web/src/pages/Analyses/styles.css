@@ -1,0 +1,34 @@
+@media (min-width: 768px) {
+  #sidebar {
+    position: fixed;
+    /* top: 0;
+        bottom: 0; */
+  }
+}
+
+.menu-list {
+  padding-left: 0;
+}
+.menu-dash {
+  margin-right: 3rem;
+  /* width: 200px; */
+}
+
+.item-lista {
+  list-style-type: none;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+.btn-spacing {
+  margin: 0;
+  width: 100%;
+}
+
+/* .container-table{
+  padding: 0;
+} */
+
+.container-nav {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}

@@ -1,8 +1,8 @@
-package com.ufrpe.vcfanalyzer.model;
+package com.ufrpe.vcfanalyzer.domain;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -11,14 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 @Entity
-public class Variant {
+public class Variant implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	
 	private String chrom;
 	private Integer position;
@@ -31,22 +32,30 @@ public class Variant {
 	// Desisti dessa forma, pois o mapeamento pelo hibernate fica complicado
 //	private Map<String, String> infoCol; 
 	
-	@ElementCollection
-	@CollectionTable(name = "InfoColumn")
-	@Column(name = "info", columnDefinition="text")
-	private List<String> infoCol;
+//	@ElementCollection
+//	@CollectionTable(name = "InfoColumn")
+//	@Column(name = "info", columnDefinition="text")
+//	private List<String> infoCol;
+	@Column(columnDefinition="text")
+	private String infoCol;
 	
 	@ElementCollection
-	@CollectionTable(name = "SampleColumn")
+	@CollectionTable(name = "samples")
 	@Column(name = "sample", columnDefinition="text")
 	private List<String> samples;
+	
+	
+//	@ElementCollection
+//	@CollectionTable(name = "Samples")
+//	@MapKeyColumn(name = "sample_key")
+//	private Map<String, String> samples; 
 
 	public Variant() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Variant(String chrom, Integer position, String id_variant, String reference, String alteration, double quality,
-			String filter, List<String> infoCol, String format, List<String> samples) {
+			String filter, String infoCol, String format, List<String> samples) {
 		this.chrom = chrom;
 		this.position = position;
 		this.id_variant = id_variant;
@@ -59,7 +68,27 @@ public class Variant {
 		this.samples = samples;
 	}
 	
-	public Long getId() {
+	
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Variant other = (Variant) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
@@ -91,16 +120,12 @@ public class Variant {
 		return filter;
 	}
 
-//	public Map<String, String> getInfoCol() {
-//		return infoCol;
-//	}
-	
 
 	public String getFormat() {
 		return format;
 	}
 
-	public List<String> getInfoCol() {
+	public String getInfoCol() {
 		return infoCol;
 	}
 

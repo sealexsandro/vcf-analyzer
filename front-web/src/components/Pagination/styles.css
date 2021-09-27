@@ -1,0 +1,21 @@
+/* .btn-transition {
+  box-shadow: none;
+  color: blueviolet;
+} */
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent; /* For some Androids */
+}
+
+.item{
+  background-color: white;
+}
+hover {
+  background: none;
+}
+
+.btn-page:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+

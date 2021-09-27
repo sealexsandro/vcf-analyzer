@@ -1,31 +1,4 @@
 
-export var variant = {
-    chrom: String,
-    position: Number,
-    id: String,
-    reference: String,
-    alteration: String,
-    quality: Number,
-    filtro: String,
-    infoCol: [],
-    format: String,
-    samples: []
-}
-
-export var variantPage = {
-    content: [],
-    last: Boolean,
-    totalElements: Number,
-    totalPages: Number,
-    size: Number,
-    number: Number,
-    first: Boolean,
-    numberOfElements: Number,
-    empty: Boolean,
-}
-
-
-
 // class Variante {
 //     constructor(
 //         chrom,

@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +6,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* .container{
+  margin-left: 3rem;
+} */
+
+[class*="container-fluid"] {
+  padding-left: 40px;
+  padding-right: 40px;
+  
+}
+[class*="container-fluid"] {
+  border: 1px dashed yellow;
+  background-clip: content-box;
 }
 
 code {

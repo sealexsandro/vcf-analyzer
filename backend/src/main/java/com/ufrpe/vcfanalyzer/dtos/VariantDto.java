@@ -1,4 +1,10 @@
-package com.ufrpe.vcfanalyzer.model;
+package com.ufrpe.vcfanalyzer.dtos;
+
+import java.util.List;
+
+import javax.persistence.Column;
+
+import com.ufrpe.vcfanalyzer.domain.Variant;
 
 //import java.util.Map;
 
@@ -15,6 +21,8 @@ public class VariantDto {
 //	private String format;
 //	private Map<String, String> samples;
 
+	private String sample;
+
 	public VariantDto() {
 	}
 
@@ -26,9 +34,30 @@ public class VariantDto {
 		this.alteration = variant.getAlteration();
 		this.quality = variant.getQuality();
 		this.filter = variant.getFilter();
+		this.sample = organizeSample(variant.getSamples());
 //		this.infoCol = variant.getInfoCol();
 //		this.format = variant.getFormat();
 //		this.samples = variant.getSamples();
+	}
+
+	public String organizeSample(List<String> samples) {
+		String sample = "";
+		String vector[];
+		int limite = samples.size();
+		if(limite > 10) {
+			limite = limite - 10;
+		}
+//		for (int i = 0; i < samples.size(); i++)
+		for (int i = 0; i < limite ; i++) {
+			
+			vector = samples.get(i).split("===");
+//			System.out.println(vector[0]);
+			sample = sample.concat(vector[0]);
+			if (i < samples.size()-1) {
+				sample = sample.concat(", ");
+			}
+		}
+		return sample;
 	}
 
 	public String getChrom() {
@@ -57,6 +86,10 @@ public class VariantDto {
 
 	public String getFilter() {
 		return filter;
+	}
+
+	public String getSample() {
+		return sample;
 	}
 
 //	public Map<String, String> getInfoCol() {
