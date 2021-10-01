@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Variant implements Serializable{
@@ -39,11 +41,13 @@ public class Variant implements Serializable{
 	@Column(columnDefinition="text")
 	private String infoCol;
 	
-	@ElementCollection
-	@CollectionTable(name = "samples")
-	@Column(name = "sample", columnDefinition="text")
-	private List<String> samples;
+//	@ElementCollection
+//	@CollectionTable(name = "samples")
+//	@Column(name = "sample", columnDefinition="text")
+//	private List<String> samples;
 	
+	@Column(columnDefinition="text")
+	private String samples;
 	
 //	@ElementCollection
 //	@CollectionTable(name = "Samples")
@@ -55,7 +59,7 @@ public class Variant implements Serializable{
 	}
 
 	public Variant(String chrom, Integer position, String id_variant, String reference, String alteration, double quality,
-			String filter, String infoCol, String format, List<String> samples) {
+			String filter, String infoCol, String format, String samples) {
 		this.chrom = chrom;
 		this.position = position;
 		this.id_variant = id_variant;
@@ -129,9 +133,18 @@ public class Variant implements Serializable{
 		return infoCol;
 	}
 
-	public List<String> getSamples() {
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getId_variant() {
+		return id_variant;
+	}
+
+	public String getSamples() {
 		return samples;
 	}
+
 
 //	public Map<String, String> getSamples() {
 //		return samples;

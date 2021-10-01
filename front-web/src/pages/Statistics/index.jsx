@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { QualityChart } from "../../charts/QualityChart";
 import Barchart from "../../components/BarChart";
@@ -9,6 +10,12 @@ import "./styles.css";
 
 export const StatisticsCharts = () => {
   const [metaDataInfo, setMetaDataInfo] = useState([]);
+
+
+  // useEffect(() => {
+  //   axios
+  //     .get()
+  // });
 
   // return (
   //   <>

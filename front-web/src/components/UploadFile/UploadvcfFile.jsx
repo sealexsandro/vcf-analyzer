@@ -2,6 +2,7 @@ import { useState } from "react";
 import UploadFileService from "../../services/upload-vcf";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
+import VcfAnalized from "../../services/vcf-analized";
 
 export const UploadFile = () => {
   const [selectedFiles, setSelectedFiles] = useState("");
@@ -30,6 +31,7 @@ export const UploadFile = () => {
     })
       .then((response) => {
         setMessage(response.data.message);
+        VcfAnalized.setIdVcf(1);
         // setTimeout(() => {
         //   setRedirect(true);
         // }, 1000);

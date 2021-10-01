@@ -1,12 +1,9 @@
 package com.ufrpe.vcfanalyzer.dtos;
 
-import java.util.List;
-
-import javax.persistence.Column;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ufrpe.vcfanalyzer.domain.Variant;
-
-//import java.util.Map;
 
 public class VariantDto {
 
@@ -17,7 +14,7 @@ public class VariantDto {
 	private String alteration;
 	private Double quality;
 	private String filter;
-//	private Map<String, String> infoCol;
+	private Map<String, String> infoCol;
 //	private String format;
 //	private Map<String, String> samples;
 
@@ -25,6 +22,19 @@ public class VariantDto {
 
 	public VariantDto() {
 	}
+
+//	public VariantDto(String chrom, Integer position, String idVariant, String reference, String alteration,
+//			Double quality, String filter, String sample) {
+//		super();
+//		this.chrom = chrom;
+//		this.position = position;
+//		this.idVariant = idVariant;
+//		this.reference = reference;
+//		this.alteration = alteration;
+//		this.quality = quality;
+//		this.filter = filter;
+//		this.sample = sample;
+//	}
 
 	public VariantDto(Variant variant) {
 		this.chrom = variant.getChrom();
@@ -35,29 +45,44 @@ public class VariantDto {
 		this.quality = variant.getQuality();
 		this.filter = variant.getFilter();
 		this.sample = organizeSample(variant.getSamples());
-//		this.infoCol = variant.getInfoCol();
+		this.infoCol = organizeColunaInfo(variant.getInfoCol());
 //		this.format = variant.getFormat();
 //		this.samples = variant.getSamples();
 	}
 
-	public String organizeSample(List<String> samples) {
+	public String organizeSample(String samples) {
 		String sample = "";
 		String vector[];
-		int limite = samples.size();
-		if(limite > 10) {
-			limite = limite - 10;
-		}
-//		for (int i = 0; i < samples.size(); i++)
-		for (int i = 0; i < limite ; i++) {
-			
-			vector = samples.get(i).split("===");
-//			System.out.println(vector[0]);
+		String vectorSamples[] = samples.split("&&");
+
+//		System.out.println(samples.split("$$"));
+		for (int i = 0; i < vectorSamples.length; i++) {
+
+			vector = vectorSamples[i].split("===");
+//			System.out.println(vectorSamples[i]);
+//			System.out.println();
+
 			sample = sample.concat(vector[0]);
-			if (i < samples.size()-1) {
+			if (i < vectorSamples.length - 1) {
 				sample = sample.concat(", ");
 			}
 		}
 		return sample;
+	}
+
+	public Map<String, String> organizeColunaInfo(String dataInfoCol) {
+		// Key = ID ---- Valor = Valor do ID
+		Map<String, String> infoColMap = new HashMap<String, String>();
+
+		String vectorInfo[] = dataInfoCol.split(";");
+		String keyAndValueColInfo[];
+
+		for (int i = 0; i < vectorInfo.length; i++) {
+			keyAndValueColInfo = vectorInfo[i].split("=");
+			infoColMap.put(keyAndValueColInfo[0], keyAndValueColInfo[1]);
+		}
+
+		return infoColMap;
 	}
 
 	public String getChrom() {
@@ -92,9 +117,9 @@ public class VariantDto {
 		return sample;
 	}
 
-//	public Map<String, String> getInfoCol() {
-//		return infoCol;
-//	}
+	public Map<String, String> getInfoCol() {
+		return infoCol;
+	}
 //
 //	public String getFormat() {
 //		return format;

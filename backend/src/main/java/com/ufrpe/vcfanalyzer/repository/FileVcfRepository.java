@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
 
 @Repository
-public interface FileDBRepository extends JpaRepository<FileVcfData, Integer> {
+public interface FileVcfRepository extends JpaRepository<FileVcfData, Integer> {
 
 }

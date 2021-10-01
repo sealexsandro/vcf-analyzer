@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Pagination from "../Pagination";
+import VcfAnalized from "../../services/vcf-analized";
+
 
 export const DataTable = () => {
   const [activePage, setActivePage] = useState(0);
@@ -14,7 +16,8 @@ export const DataTable = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/files?page=${activePage}&sort=id&size=10`)
+      // .get(`http://localhost:8080/files?page=${activePage}&sort=id&size=10`)
+      .get(`http://localhost:8080/filesgetbyid?id=${1}&page=${activePage}&sort=id&size=10`)
       .then((response) => {
         const results = response.data;
 

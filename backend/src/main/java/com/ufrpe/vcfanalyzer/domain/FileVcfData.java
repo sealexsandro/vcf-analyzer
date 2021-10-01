@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,28 +14,30 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "filevcf")
 @Inheritance(strategy = InheritanceType.JOINED) // Tabela por subclasse Classe Pai e todas suas filhas
-public class FileVcfData implements Serializable{
+public class FileVcfData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	// CABEÇALHO DO VCF
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name= "tagheader_key") 
+	@JoinColumn(name = "filevcf_id")
 	private List<TagHeader> tagsCabecalho;
 
 	// Corpo do vcf, linhas com todas as variantes
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name= "variant_key") 
+	@JoinColumn(name = "filevcf_id")
 	private List<Variant> variants;
 
 	public FileVcfData() {
@@ -58,16 +61,28 @@ public class FileVcfData implements Serializable{
 		this.tagsCabecalho = tagsCabecalho;
 	}
 
-	public List<Variant> getRowsBodyVcf() {
+//	public List<Variant> getRowsBodyVcf() {
+//		return variants;
+//	}
+
+//	public void setRowsBodyVcf(List<Variant> rowsBodyVcf) {
+//		this.variants = rowsBodyVcf;
+//	}
+//	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public List<Variant> getVariants() {
 		return variants;
 	}
 
-	public void setRowsBodyVcf(List<Variant> rowsBodyVcf) {
-		this.variants = rowsBodyVcf;
-	}
-	
-	public Integer getId() {
-		return id;
+	public void setVariants(List<Variant> variants) {
+		this.variants = variants;
 	}
 
 	@Override
@@ -86,7 +101,5 @@ public class FileVcfData implements Serializable{
 		FileVcfData other = (FileVcfData) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 
 }

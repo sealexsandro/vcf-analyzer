@@ -9,11 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
@@ -40,6 +42,13 @@ public class FileController {
 		Page<VariantDto> list = vcfService.findAll(pageable);
 		return ResponseEntity.ok(list);
 	}
+	
+	@GetMapping(value = "/filesgetbyid", params = "id")
+	public ResponseEntity<Page<VariantDto>> findAllById(Pageable pageable, @RequestParam Integer id) {
+		Page<VariantDto> list = vcfService.findByFileId(id, pageable);
+		return ResponseEntity.ok(list);
+	}
+	
 	
 	@GetMapping(value = "/quality-summary")
 	public ResponseEntity<List<QualityVariantDTO>> variantQualitySummary() {

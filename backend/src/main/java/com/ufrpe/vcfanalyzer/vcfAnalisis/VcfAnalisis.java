@@ -30,7 +30,7 @@ public class VcfAnalisis {
 		List<String> fileVcf = null; // todo o arquivo será colocado nesta lista
 
 		if (stream != null) {
-		//	StringBuilder sb = new StringBuilder();
+			// StringBuilder sb = new StringBuilder();
 			String line;
 			fileVcf = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class VcfAnalisis {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 				while ((line = reader.readLine()) != null) {
 					fileVcf.add(line);
-				//	sb.append(line).append("\n");
+					// sb.append(line).append("\n");
 				}
 			} finally {
 				stream.close();
@@ -138,7 +138,7 @@ public class VcfAnalisis {
 //		Map<String, String> infoCol = new HashMap<String, String>();
 //		Map<String, String> samples = new HashMap<String, String>();
 		String infoCol = "";
-		List<String> samples = new ArrayList<>();
+		String samples = "";
 
 		for (int coluna = 0; coluna < VariantToken.tokens.length; coluna++) {
 			if (coluna == 0) {
@@ -168,9 +168,15 @@ public class VcfAnalisis {
 			} else {
 				for (int colunaSamples = coluna; colunaSamples < rowData.length; colunaSamples++) {
 					if (!rowData[colunaSamples].equals(".")) {
-					//	samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
-						String sample = this.columnSamples.get(colunaSamples) + "===" + rowData[colunaSamples];
-						samples.add(sample);
+						// samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
+						String samp = this.columnSamples.get(colunaSamples) + "===" + rowData[colunaSamples];
+						samples = samples.concat(samp);
+
+						if (colunaSamples < rowData.length) {
+							samples = samples.concat("&&");
+						}
+						
+//						System.out.println(samples);
 					}
 
 				}
