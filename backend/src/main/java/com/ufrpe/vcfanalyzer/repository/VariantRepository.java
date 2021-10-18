@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
+import com.ufrpe.vcfanalyzer.dtos.VariantDto;
 
 @Repository
 public interface VariantRepository extends JpaRepository<Variant, Integer> {
@@ -22,4 +23,10 @@ public interface VariantRepository extends JpaRepository<Variant, Integer> {
 	@Query( value = "SELECT * FROM variant v where v.filevcf_id = :id", nativeQuery = true)
 	Page<Variant> getVariantsById(@Param(value = "id") Integer id, Pageable pageable);
 	
+//	@Query("SELECT new com.ufrpe.vcfanalyzer.dtos.VariantDto(obj.reference, obj.alteration, obj.infoCol)"
+//			+ " FROM Variant AS obj")
+//	List<VariantDto> findAllVariantsByIdVcfToInfoStatics();
+
+	@Query( value = "SELECT * FROM variant v where v.filevcf_id = :id", nativeQuery = true)
+	List<Variant> getVariantsById(@Param(value = "id") Integer id);	
 }

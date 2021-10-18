@@ -1,18 +1,16 @@
-// import { Bar } from "react-chartjs-2";
-import { useState } from "react";
 import Chart from "react-apexcharts";
 
-export default function Barchart({ labels, series }) {
+export default function Barchart({ labels, series, sizeDataLabel, titleLateral, titleDown, sizeLabelFont }) {
   const chartData = {
     labels: labels,
     series: series,
   };
 
   const options = {
-    chart: {
-      height: 350,
-      type: "bar",
-    },
+    // chart: {
+    //   height: 500,
+    //   type: "bar",
+    // },
     plotOptions: {
       bar: {
         // horizontal: true,
@@ -31,13 +29,13 @@ export default function Barchart({ labels, series }) {
       },
       offsetY: 2,
       style: {
-        fontSize: "12px",
+        fontSize: sizeDataLabel? sizeDataLabel : "12px",
         colors: ["#304758"],
       },
     },
     yaxis: {
       title: {
-        text: "Number of Variants",
+        text: titleLateral,
         offsetX: -7,
         offsetY: -20,
         style: {
@@ -56,9 +54,9 @@ export default function Barchart({ labels, series }) {
       // },
     },
     title: {
-      text: "QUAL Values",
+      text: titleDown,
       floating: false,
-      offsetY: 312,
+      offsetY: 363,
       align: "center",
       style: {
         color: "#444",
@@ -76,9 +74,9 @@ export default function Barchart({ labels, series }) {
             labels: {
               style: {
                 colors: [],
-                fontSize: "12px",
+                fontSize:  sizeLabelFont? sizeLabelFont : "12px",
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontWeight: 400,
+                fontWeight: 380,
                 cssClass: "apexcharts-xaxis-label",
               },
               offsetX: 0,
@@ -118,7 +116,7 @@ export default function Barchart({ labels, series }) {
         }}
         series={chartData.series}
         type="bar"
-        height="330"
+        height="380"
       />
     </div>
   );

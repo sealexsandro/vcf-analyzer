@@ -12,6 +12,20 @@ import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 @Component
 public class SummaryStatistics {
 
+	public float mediana(List<Integer> numberList) {
+		float mediana;
+		// lista com quantidade de elementos = n, onde n é par
+		if (numberList.size() % 2 == 0) {
+			float elementoDoCentro = numberList.get(numberList.size() / 2);
+			float elementoDoCentroMaisUm = numberList.get((numberList.size() / 2) + 1);
+			mediana = (elementoDoCentro + elementoDoCentroMaisUm) / 2;
+			return mediana;
+		} else {
+			mediana = numberList.get((numberList.size() + 1) / 2);
+			return mediana;
+		}
+	}
+
 	public List<SumaryStatisticsColumnINFO> dpsStatistics(List<String> colInfo) {
 		String info[];
 		String vector[];

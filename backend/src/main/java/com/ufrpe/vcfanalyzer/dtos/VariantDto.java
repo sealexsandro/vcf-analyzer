@@ -49,6 +49,12 @@ public class VariantDto {
 //		this.format = variant.getFormat();
 //		this.samples = variant.getSamples();
 	}
+	
+	public VariantDto(String reference, String alteration, String infoCol) {
+		this.reference = reference;
+		this.alteration = alteration;
+		this.infoCol = organizeColunaInfo(infoCol);
+	}
 
 	public String organizeSample(String samples) {
 		String sample = "";

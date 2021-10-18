@@ -5,13 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.Variant;
+import com.ufrpe.vcfanalyzer.statistics.InfoStatistics;
+import com.ufrpe.vcfanalyzer.statistics.Statistics;
 import com.ufrpe.vcfanalyzer.utils.VariantToken;
 
 @Component
@@ -140,7 +146,7 @@ public class VcfAnalisis {
 		String infoCol = "";
 		String samples = "";
 
-		for (int coluna = 0; coluna < VariantToken.tokens.length; coluna++) {
+		for (int coluna = 0; coluna < 10; coluna++) {
 			if (coluna == 0) {
 				chrom = rowData[coluna];
 			} else if (coluna == 1) {
@@ -175,7 +181,7 @@ public class VcfAnalisis {
 						if (colunaSamples < rowData.length) {
 							samples = samples.concat("&&");
 						}
-						
+
 //						System.out.println(samples);
 					}
 
@@ -187,8 +193,129 @@ public class VcfAnalisis {
 		return variant;
 	}
 
-	public FileVcfData getVcfFileData() {
-		return vcfFileData;
+	public String analizeTipoDeVariacao(String referencia, String alteracao) {
+
+		String alelosAlternativos[] = alteracao.split(",");
+
+		if (referencia.length() == 1 && !referencia.equalsIgnoreCase(".")) {
+			if (alelosAlternativos[0].length() == 1) {
+				return VariantToken.SNP;
+			} else {
+				// Caso para entrar aqui: | ref = C alt = CTAG | //houve uma inserção, ou seja
+				// um indel
+				return VariantToken.INDEL;
+			}
+
+		} else if (referencia.length() > 1 && !referencia.equalsIgnoreCase(".")) {
+
+			boolean mnp = false; // mnp = polimorfismo de nucleotideo multiplo
+
+			for (int i = 0; i < alelosAlternativos.length; i++) {
+				if (alelosAlternativos[i].length() == referencia.length()) {
+					mnp = true;
+				} else {
+					mnp = false;
+					break;
+				}
+			}
+			if (mnp) {
+				return VariantToken.MNP;
+			} else {
+				return VariantToken.INDEL;
+			}
+
+		}
+
+		return "";
+	}
+
+	public Map<String, Integer> variantsTypesSummary(List<Variant> variants) {
+
+		Map<String, Integer> variantTypes = new HashMap<String, Integer>();
+		int contSnps = 0;
+		int contIndels = 0;
+
+		String tipoVariacao = "";
+		for (Variant v : variants) {
+			tipoVariacao = analizeTipoDeVariacao(v.getReference(), v.getAlteration());
+			if (VariantToken.SNP.equalsIgnoreCase(tipoVariacao)) {
+				contSnps++;
+			} else if (VariantToken.INDEL.equalsIgnoreCase(tipoVariacao)) {
+				contIndels++;
+			}
+		}
+		variantTypes.put(VariantToken.SNP, contSnps);
+		variantTypes.put(VariantToken.INDEL, contIndels);
+
+		return variantTypes;
+	}
+
+	public float getValueSingleFieldInfo(String rowFieldInfo, String singleFieldInfo) {
+
+		String vectorInfo[] = rowFieldInfo.split(";");
+		String keyAndValueColInfo[];
+
+		for (int i = 0; i < vectorInfo.length; i++) {
+			keyAndValueColInfo = vectorInfo[i].split("=");
+			if (keyAndValueColInfo[0].equalsIgnoreCase(singleFieldInfo)) {
+				try {
+					float value = Float.parseFloat(keyAndValueColInfo[1]);
+					return value;
+				} catch (Exception err) {
+					System.out.println("Deu Erro na conversão de string para float, linha 259 da classe VCFAnalisis");
+					System.err.println(err);
+					return 0;
+				}
+			}
+		}
+		return 0;
+	}
+
+	private Map<String, List<Float>> getValuesOfFieldInfoOfVariantType(String fieldInfo, List<Variant> variants) {
+
+		Map<String, List<Float>> valuesOfFieldInfoOfVariantType = new HashMap<>();
+		float valueOfFieldInfo = 0;
+		String tipoVariacao = "";
+		valuesOfFieldInfoOfVariantType.put(VariantToken.FULL_VARIANTS_TYPES, new ArrayList<>());
+
+		for (Variant v : variants) {
+			tipoVariacao = analizeTipoDeVariacao(v.getReference(), v.getAlteration());
+			valueOfFieldInfo = getValueSingleFieldInfo(v.getInfoCol(), fieldInfo);
+
+			valuesOfFieldInfoOfVariantType.get(VariantToken.FULL_VARIANTS_TYPES).add(valueOfFieldInfo);
+
+			if (valuesOfFieldInfoOfVariantType.containsKey(tipoVariacao)) {
+				valuesOfFieldInfoOfVariantType.get(tipoVariacao).add(valueOfFieldInfo);
+			} else {
+				valuesOfFieldInfoOfVariantType.put(tipoVariacao, new ArrayList<>());
+				valuesOfFieldInfoOfVariantType.get(tipoVariacao).add(valueOfFieldInfo);
+			}
+		}
+		return valuesOfFieldInfoOfVariantType;
+	}
+
+	// vai processar igual uma tartaruga aqui em baixo
+	public List<Statistics> statisticsFieldInfo(String fieldInfo, List<Variant> variants) {
+
+//		InfoStatistics infoStatistics;
+
+		Map<String, List<Float>> valuesMap = getValuesOfFieldInfoOfVariantType(fieldInfo, variants);
+//		List<Map<String, Statistics>> infoStatisticsOfVariantType = new ArrayList<>();
+		List<Statistics> fullStatistics = new ArrayList<>();
+		for (Entry<String, List<Float>> entry : valuesMap.entrySet()) {
+			Statistics statistics = new Statistics(fieldInfo, entry.getKey(), entry.getValue());
+			fullStatistics.add(statistics);
+		}
+
+//		infoStatistics = new InfoStatistics(fieldInfo, fullStatistics);
+//		if (valuesOfFieldInfoSNP.size() > 0) {
+//		//	infoStatistics.addInfoSummary(VariantToken.SNP, valuesOfFieldInfoSNP);
+//		}
+//		if (valuesOfFieldInfoINDEL.size() > 0) {
+//			infoStatistics.addInfoSummary(VariantToken.INDEL, valuesOfFieldInfoINDEL);
+//		}
+
+		return fullStatistics;
 	}
 
 }

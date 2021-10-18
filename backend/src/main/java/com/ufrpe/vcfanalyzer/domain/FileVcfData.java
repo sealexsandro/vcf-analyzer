@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -43,6 +40,11 @@ public class FileVcfData implements Serializable {
 	public FileVcfData() {
 		this.tagsCabecalho = new ArrayList<TagHeader>();
 		this.variants = new ArrayList<Variant>();
+	}
+
+	public FileVcfData(List<TagHeader> tagsCabecalho, List<Variant> variants) {
+		this.tagsCabecalho = tagsCabecalho;
+		this.variants = variants;
 	}
 
 	public void addTagCabecalho(TagHeader tagHeader) {

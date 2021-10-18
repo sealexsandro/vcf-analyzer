@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Pagination from "../Pagination";
-import VcfAnalized from "../../services/vcf-analized";
+// import VcfAnalized from "../../services/vcf-analized";
 
 
 export const DataTable = () => {

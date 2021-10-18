@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Barchart from "../BarChart";
+import Barchart from "../components/Charts/GenericsChart/BarChart";
 
 export const Charts = () => {
   const { chartData, setChartData } = useState({
@@ -34,10 +34,6 @@ export const Charts = () => {
       });
     });
   }, []);
-
-  const qualityChart = () => {
-    return chartData;
-  };
 
   return (
     <div className="container-fluid d-flex flex-xl-row flex-column justify-content-between container-table">

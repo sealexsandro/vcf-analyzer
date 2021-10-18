@@ -16,6 +16,17 @@ public class VariantToken {
     public static final String FORMAT = "FORMAT";
     public static final String SAMPLES = "SAMPLES";
     
-    public static final String tokens[] = {CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLES};
+//    public static final String tokens[] = {CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLES};
 
+    // Todas os tipos de variações juntas
+    public static final String FULL_VARIANTS_TYPES = "fullVariantsTypes";
+    // Tipos de Variações
+    
+    public static final String SNP = "snp";
+    public static final String MNP = "mnp";
+    public static final String INDEL = "indel";
+    public static final String INS = "ins";   // indel de inserção
+    public static final String DEL = "del";   // indel de exclusão
+    
+    
 }

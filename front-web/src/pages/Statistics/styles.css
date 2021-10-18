@@ -26,3 +26,16 @@ body.thumb {
   background-color: #eeeeff;
   background-clip: content-box;
 }
+
+.box-chart{
+  width: 75%;
+}
+.box-statistics{
+  align-items: start;
+  justify-content: space-between;
+
+}
+.box-statistics-data{
+  /* width: 20%; */
+}
+
