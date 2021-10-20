@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Barchart from "../../components/Charts/BarChart";
+import { DataSummaryOfChart } from "../DataSummaryOfChart";
 // import { Link } from "react-router-dom";
-import Barchart from "../../GenericsChart/BarChart";
 
-import "./style.css";
+import "../styles-global.css";
 
 export const QualityChart = () => {
   const [chartData, setChartData] = useState({
@@ -53,13 +54,16 @@ export const QualityChart = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="box-statistics  p-3 d-flex flex-wrap align-content-start">
+      <div className="box-chart">
       <Barchart
         labels={chartData.labels}
         series={chartData.series}
         titleLateral="Number of Variants"
         titleDown="QUAL Values"
       />
+    </div>
+      <DataSummaryOfChart />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Barchart from "../../GenericsChart/BarChart";
+import Barchart from "../../components/Charts/BarChart";
+import { DataSummaryOfChart } from "../DataSummaryOfChart";
 
 export const VariantTypesChart = () => {
   const [chartData, setChartData] = useState({
@@ -54,8 +55,16 @@ export const VariantTypesChart = () => {
       });
   }, []);
   return (
-    <div className="">
-      <Barchart labels={chartData.labels} series={chartData.series} sizeDataLabel="14px" sizeLabelFont="15px" />
+    <div className="box-statistics  p-3 d-flex flex-wrap align-content-start">
+      <div className="box-chart">
+        <Barchart
+          labels={chartData.labels}
+          series={chartData.series}
+          sizeDataLabel="14px"
+          sizeLabelFont="15px"
+        />
+      </div>
+      <DataSummaryOfChart />
     </div>
   );
 };

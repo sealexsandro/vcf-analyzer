@@ -18,7 +18,7 @@ body {
   
 }
 [class*="container-fluid"] {
-  border: 1px dashed yellow;
+  /* border: 1px dashed yellow; */
   background-clip: content-box;
 }
 

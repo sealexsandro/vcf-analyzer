@@ -1,13 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { QualityChart } from "../../components/Charts/SpecificChart/QualityChart";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import { SubMenu } from "../../components/SubMenu";
-import { BoxPlot } from "../../components/Charts/GenericsChart/Boxplot";
 import "./styles.css";
-import { VariantTypesChart } from "../../components/Charts/SpecificChart/VariantTypesChart";
+import { StatisticsMenu } from "../../charts/StatisticsMenu";
+import { chartComponents } from "../../utils/chartComponents";
 
 export const StatisticsCharts = () => {
   const [dataTagsInfo, setDataTagsInfo] = useState([]);
@@ -18,19 +17,19 @@ export const StatisticsCharts = () => {
     description: "",
   });
 
-  const [dashComponent, setDashComponent] = useState(0);
+  const [dashComponent, setDashComponent] = useState(chartComponents.VARIANT_QUALITY);
 
-  const dashPageComponent = () => {
-    if (dashComponent === 0) {
-      return <QualityChart />;
-    }
-    if (dashComponent === 1) {
-      return <VariantTypesChart />;
-    }
-    if (dashComponent === 2) {
-      return <BoxPlot tagInfo={selectedTagInfo} />;
-    }
-  };
+  // const dashPageComponent = () => {
+  //   if (dashComponent === 0) {
+  //     return <QualityChart />;
+  //   }
+  //   if (dashComponent === 1) {
+  //     return <VariantTypesChart />;
+  //   }
+  //   if (dashComponent === 2) {
+  //     return <BoxPlot tagInfo={selectedTagInfo} />;
+  //   }
+  // };
 
   useEffect(() => {
     axios.get(`http://localhost:8080/tagsbyidvcf?id=${1}`).then((response) => {
@@ -61,7 +60,7 @@ export const StatisticsCharts = () => {
       type: tagData.type,
       description: tagData.description,
     });
-    setDashComponent(2);
+    setDashComponent(chartComponents.INFO_STATISTICS);
   };
 
   return (
@@ -84,7 +83,7 @@ export const StatisticsCharts = () => {
                 <li className="">
                   <button
                     className="nav-link px-2 "
-                    onClick={() => setDashComponent(0)}
+                    onClick={() => setDashComponent(chartComponents.VARIANT_QUALITY)}
                   >
                     Variant Quality Static
                   </button>
@@ -92,7 +91,7 @@ export const StatisticsCharts = () => {
                 <li className="">
                   <button
                     className="nav-link px-2 "
-                    onClick={() => setDashComponent(1)}
+                    onClick={() => setDashComponent(chartComponents.VARIANT_TYPES)}
                   >
                     Variant Types
                   </button>
@@ -128,11 +127,26 @@ export const StatisticsCharts = () => {
               </ul>
             </div>
           </aside>
-          <main className="col overflow-auto">
-            <div className="box-statistics border h-100  p-3 d-flex flex-wrap align-content-start">
-              <div className="box-chart">{dashPageComponent(dashComponent)}</div>
-              <div className="box-statistics-data">alguma coisa aqui</div>
-            </div>
+          <main className="col charts flex overflow-auto border h-100 box-main">
+            {/* {dashPageComponent(dashComponent)} */}
+            <StatisticsMenu chartComponent={dashComponent} tagInfo={selectedTagInfo}/>
+
+            {/* <div className="box-statistics  p-3 d-flex flex-wrap align-content-start">
+              <div className="box-chart movable-bar">
+                <div className="charts">{dashPageComponent(dashComponent)}</div>
+              </div>
+              <div className="border h-100 box-statistics-data">
+                <div className="d-flex justify-content-center align-items-center pb-2 ">
+                  <span className="fs-6 text-truncate">Dados Estatísticos</span>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
+                  animi, perspiciatis adipisci rerum veniam excepturi quisquam
+                  magni error rem impedit odio repudiandae, temporibus tenetur
+                  accusantium ducimus qui officia aliquam aperiam.
+                </p>
+              </div>
+            </div> */}
           </main>
         </div>
       </div>

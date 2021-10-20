@@ -1,54 +1,49 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Charts from "react-apexcharts/src/react-apexcharts";
-import { VariantTypes } from "../../../../utils/tokens";
 
-export const BoxPlot = ({tagInfo}) => {
-  // const [tagCampoInfo, setTagCampoInfo] = useState(tagInfo);
-  // const [tagStatistics, setTagStatistics] = useState({
-  //   idTagName: "",
-  //   statisticsOfVariantType: [],
-  // });
-  const { tagField } = tagInfo;
-  // const [statistics, setStatistics] = useState([]);
-  const [eixos, setEixos] = useState([]);
+export const BoxPlot = ({ eixosBoxPlot }) => {
+   const eixos = eixosBoxPlot;
+  // const [eixos, setEixos] = useState([]);
 
-  useEffect(() => {
-    // console.log(tagField)
-    axios
-      .get(`http://localhost:8080/info-statistics?field_info=${tagField}&id=${1}`) // mudar essa requisicao
-      .then((response) => {
-        const results = response.data;
+  // useEffect(() => {
+  //   // console.log(tagField)
+  //   axios
+  //     .get(
+  //       `http://localhost:8080/info-statistics?field_info=${tagField}&id=${1}`
+  //     ) // mudar essa requisicao
+  //     .then((response) => {
+  //       const results = response.data;
 
-        const statisticsOfHeaderTag = [];
-        const eixosBoxPlot = [];
-        results.forEach((statistics, index) => {
-          statisticsOfHeaderTag[index] = {
-            index: index,
-            dataName: statistics.dataName,
-            media: statistics.media,
-            valorMinimo: statistics.valorMinimo,
-            valorMaximo: statistics.valorMaximo,
-            boxPlot: statistics.boxPlot,
-          };
-          eixosBoxPlot[index] = {
-            x: statistics.dataName,
-            y: [
-              statistics.boxPlot.valorMinimo,
-              statistics.boxPlot.primeiroQuartil,
-              statistics.boxPlot.mediana,
-              statistics.boxPlot.terceiroQuartil,
-              statistics.boxPlot.valorMaximo,
-            ],
-          };
-          // console.log(statisticsOfHeaderTag[index].boxPlot)
-        });
-        setEixos(eixosBoxPlot);
-        // setStatistics(statisticsOfHeaderTag);
-        // console.log(statisticsOfHeaderTag);
-        // chartData();
-      });
-  }, [tagField]);
+  //       const statisticsOfHeaderTag = [];
+  //       const eixosBoxPlot = [];
+  //       results.forEach((statistics, index) => {
+  //         statisticsOfHeaderTag[index] = {
+  //           index: index,
+  //           dataName: statistics.dataName,
+  //           media: statistics.media,
+  //           valorMinimo: statistics.valorMinimo,
+  //           valorMaximo: statistics.valorMaximo,
+  //           boxPlot: statistics.boxPlot,
+  //         };
+  //         eixosBoxPlot[index] = {
+  //           x: statistics.dataName,
+  //           y: [
+  //             statistics.boxPlot.valorMinimo,
+  //             statistics.boxPlot.primeiroQuartil,
+  //             statistics.boxPlot.mediana,
+  //             statistics.boxPlot.terceiroQuartil,
+  //             statistics.boxPlot.valorMaximo,
+  //           ],
+  //         };
+  //         // console.log(statisticsOfHeaderTag[index].boxPlot)
+  //       });
+  //       setEixos(eixosBoxPlot);
+  //       // setStatistics(statisticsOfHeaderTag);
+  //       // console.log(statisticsOfHeaderTag);
+  //       // chartData();
+  //     });
+  // }, [tagField]);
 
   // const chartData = () => {
   //   const data = [];
@@ -169,8 +164,17 @@ export const BoxPlot = ({tagInfo}) => {
 
   return (
     <div>
-      {/* { console.log(tagStatistics.statisticsOfVariantType)} */}
-      <Charts options={options} series={series} type="boxPlot" height={350} />
+      <>
+        {/* <div className="box-statistics  p-3 d-flex flex-wrap align-content-start"> */}
+          <Charts
+            options={options}
+            series={series}
+            type="boxPlot"
+            height={350}
+          />
+          {/* <DataSummaryOfChart /> */}
+        {/* </div> */}
+      </>
     </div>
   );
 };
