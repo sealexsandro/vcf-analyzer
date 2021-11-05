@@ -2,11 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
-import NavBar from "../../components/NavBar";
-import { SubMenu } from "../../components/SubMenu";
 import "./styles.css";
 import { StatisticsMenu } from "../../charts/StatisticsMenu";
 import { chartComponents } from "../../utils/chartComponents";
+import { NavBarWithMenu } from "../../components/NavbarWithMenu";
 
 export const StatisticsCharts = () => {
   const [dataTagsInfo, setDataTagsInfo] = useState([]);
@@ -32,7 +31,7 @@ export const StatisticsCharts = () => {
   // };
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/tagsbyidvcf?id=${1}`).then((response) => {
+    axios.get(`http://localhost:8080/tagsInfobyidvcf?id=${1}`).then((response) => {
       const results = response.data;
 
       const tagsInfo = [];
@@ -65,8 +64,9 @@ export const StatisticsCharts = () => {
 
   return (
     <>
-      <NavBar />
-      <SubMenu />
+      {/* <NavBar /> */}
+      <NavBarWithMenu />
+      {/* <SubMenu /> */}
       <div className="container-fluid pb-3 flex-grow-1 d-flex flex-column flex-sm-row overflow-auto ">
         <div className="row flex-grow-sm-1 flex-grow-1 ">
           <aside className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0 pb-3 col-aside">
@@ -80,22 +80,23 @@ export const StatisticsCharts = () => {
                 </span>
               </div>
               <ul className="nav nav-pills flex-sm-column flex-row flex-nowrap  justify-content-center">
+              <li className="">
+                  <button
+                    className="nav-link px-2 "
+                    onClick={() => setDashComponent(chartComponents.VARIANT_TYPES)}
+                  >
+                    Tipos de Variações
+                  </button>
+                </li>
                 <li className="">
                   <button
                     className="nav-link px-2 "
                     onClick={() => setDashComponent(chartComponents.VARIANT_QUALITY)}
                   >
-                    Variant Quality Static
+                    Quality de Variações
                   </button>
                 </li>
-                <li className="">
-                  <button
-                    className="nav-link px-2 "
-                    onClick={() => setDashComponent(chartComponents.VARIANT_TYPES)}
-                  >
-                    Variant Types
-                  </button>
-                </li>
+        
                 <li className="dropdown">
                   <Link
                     to="#"

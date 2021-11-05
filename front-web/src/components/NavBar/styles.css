@@ -1,17 +1,14 @@
-
-.navbar-geral{
-    border-bottom: 2px solid #D3D3D3;
-    padding: 0;
-    margin-bottom: 10px;
-}
-
 .logo{
+    padding-left: 10px;
     text-decoration: none;
 }
 
+/* .navbar-geral{
+    border-bottom: 2px solid #D3D3D3;
+    padding: 0;
+    margin-bottom: 10px;
+} */
 
-.tituloLogo{
-    margin-left: 10px;
-    margin-bottom: 0;
+.titulo-logo{
     color: black;
 }

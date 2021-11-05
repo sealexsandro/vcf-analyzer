@@ -3,6 +3,7 @@ package com.ufrpe.vcfanalyzer.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,6 @@ import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
 import com.ufrpe.vcfanalyzer.service.VcfStorageService;
-import com.ufrpe.vcfanalyzer.statistics.InfoStatistics;
 import com.ufrpe.vcfanalyzer.statistics.Statistics;
 
 @RestController
@@ -51,9 +51,9 @@ public class FileController {
 		return ResponseEntity.ok(list);
 	}
 
-	@GetMapping(value = "/tagsbyidvcf", params = "id")
+	@GetMapping(value = "/tagsInfobyidvcf", params = "id")
 	public ResponseEntity<List<TagHeader>> getTagsHeaderInfoByIdVcf(@RequestParam Integer id) {
-		List<TagHeader> list = vcfService.getTagsHeaderInfoByIdVcf(id);
+		List<TagHeader> list = vcfService.getTagsInfoHeaderByIdVcf(id);
 		return ResponseEntity.ok(list);
 	}
 
@@ -69,10 +69,10 @@ public class FileController {
 		Map<String, Integer> variantsTypes = vcfService.getVariantsTypes(id);
 		return ResponseEntity.ok(variantsTypes);
 	}
-	
-	
-	@GetMapping(value = "/info-statistics", params = {"field_info","id"})
-	public ResponseEntity<List<Statistics>> statisticsFieldInfo(@RequestParam String field_info, @RequestParam Integer id){
+
+	@GetMapping(value = "/info-statistics", params = { "field_info", "id" })
+	public ResponseEntity<List<Statistics>> statisticsFieldInfo(@RequestParam String field_info,
+			@RequestParam Integer id) {
 		List<Statistics> infoStatistics = vcfService.statisticsFieldInfo(field_info, id);
 		return ResponseEntity.ok(infoStatistics);
 	}
@@ -83,4 +83,25 @@ public class FileController {
 		return ResponseEntity.ok(list);
 	}
 
+	@GetMapping(value = "/variants-by-unique-attributes", params = "id")
+	public ResponseEntity<Map<String, List<String>>> getVariantsOfAttributesNotDuplicates(@RequestParam Integer id) {
+		Map<String, List<String>> atributesMap = vcfService.getVariantsOfAttributesNotDuplicatesById(id);
+		return ResponseEntity.ok(atributesMap);
+	}
+
+	@GetMapping(value = "/info-attributes", params = "id")
+	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id) {
+		Map<String, Set<String>> atributesInfoColMap = this.vcfService.getValuesInfoNotDuplicatesById(id);
+		return ResponseEntity.ok(atributesInfoColMap);
+	}
+
+	@GetMapping(value = "/getfilesbyfilds", params = { "chrom", "position", "reference", "alteration", "info_field",
+			"id" })
+	public ResponseEntity<Page<VariantDto>> getVariantsByFilds(@RequestParam String chrom,
+			@RequestParam Integer position, @RequestParam String reference, @RequestParam String alteration,
+			@RequestParam String info_field, @RequestParam Integer id, Pageable pageable) {
+		Page<VariantDto> list = vcfService.getVariantsByFields(chrom, position, reference, alteration, info_field, id,
+				pageable);
+		return ResponseEntity.ok(list);
+	}
 }

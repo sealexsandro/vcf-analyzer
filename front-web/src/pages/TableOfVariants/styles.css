@@ -1,0 +1,125 @@
+.variant-table {
+  padding-left: 0;
+  margin-left: 0;
+}
+.menu-list {
+  margin-bottom: 3px;
+}
+
+.container-filter {
+  /* margin-right: 3rem; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 17%;
+  margin-top: 0;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.column-filter {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0;
+  width: 100%;
+}
+
+.label-filter {
+  /* display: flex;
+  flex-direction: column; */
+  /* margin: auto; */
+  font-size: 11pt;
+}
+
+.select-filter{
+  font-size: 10pt;
+  margin-right: 5px;
+  width: 100%;
+}
+.option-filter {
+  font-size: 10pt;
+}
+
+.container-main {
+  /* padding-right: 0; */
+  /* padding-top: 5px !important; */
+  margin-bottom: 0 !important;
+}
+.container-menu {
+  padding-left: 15px;
+  padding-right: 35px;
+}
+.titulo-menu {
+  margin-bottom: 0;
+  font-size: 12pt;
+  font-weight: bold;
+}
+.menu-list {
+  margin-bottom: 3px;
+}
+.lista-de-botoes {
+  margin-right: 5px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.item-lista {
+  list-style-type: none;
+  margin-bottom: 0;
+  margin-left: 10px;
+}
+
+
+.butao {
+  font-size: 14px;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+/* .table-borderless tr,
+td {
+  border: 0;
+} */
+
+.text-filter{
+  font-size: 11pt;
+}
+
+.table-td {
+  padding: 0;
+}
+
+.filtros {
+  margin-top: 3rem;
+}
+
+/* .campo-filtro {
+  margin-right: 5px;
+  width: 100%;
+} */
+
+.button-limpar-filtrar{
+  margin-right: 5px;
+  font-size: 10pt;
+}
+
+.button-filtrar{
+  font-size: 10pt;
+  padding: auto;
+
+}
+
+@media (max-width: 760px) {
+  .variants-table {
+    width: 100%;
+    margin: auto;
+  }
+  .container-filter {
+    width: 100%;
+    margin: auto;
+  }
+  .column-filter {
+    display: flex;
+    flex-direction: row;
+  }
+}

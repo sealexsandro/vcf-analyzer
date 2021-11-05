@@ -5,16 +5,16 @@ public class VariantToken {
 
     public static final String HEADER= "linhas_de_cabecalho";
     public static final String DATA_LINE = "linhas_de_dados";
-    public static final String CHROM = "CHROM";
-    public static final String POS = "POS";
-    public static final String ID = "ID";
-    public static final String REF = "REF";
-    public static final String ALT = "ALT";
-    public static final String QUAL = "QUAL";
-    public static final String FILTER = "FILTER";
-    public static final String INFO = "INFO";
-    public static final String FORMAT = "FORMAT";
-    public static final String SAMPLES = "SAMPLES";
+    public static final String CHROM = "chrom";
+    public static final String POS = "posicao";
+    public static final String ID = "idVariant";
+    public static final String REF = "reference";
+    public static final String ALT = "alteration";
+    public static final String QUAL = "quality";
+    public static final String FILTER = "filter";
+    public static final String INFO = "info";
+    public static final String FORMAT = "format";
+    public static final String SAMPLES = "samples";
     
 //    public static final String tokens[] = {CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLES};
 

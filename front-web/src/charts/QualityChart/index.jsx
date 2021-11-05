@@ -49,12 +49,14 @@ export const QualityChart = () => {
         ],
       });
       // setData(mySeries);
-      // console.log(mySeries);
+      // console.log("Imprimiu AQUI 123");
     });
   }, []);
 
   return (
+   
     <div className="box-statistics  p-3 d-flex flex-wrap align-content-start">
+       {console.log("Passou AQUI 123")}
       <div className="box-chart">
       <Barchart
         labels={chartData.labels}

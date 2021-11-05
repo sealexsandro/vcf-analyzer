@@ -9,6 +9,7 @@ public class Statistics {
 	private String idTagHeaderName;
 	private String dataName;
 	private float media;
+	private float mediana;
 	private float valorMinimo;
 	private float valorMaximo;
 	private BoxPlot boxPlot;
@@ -21,6 +22,7 @@ public class Statistics {
 		this.idTagHeaderName = idTagHeaderName;
 		this.dataName = dataName;
 		this.media = Calculations.media(numList);
+		this.mediana = Calculations.mediana(numList);
 		this.valorMinimo = Calculations.valorMinimo(numList);
 		this.valorMaximo = Calculations.valorMaximo(numList);
 		this.boxPlot = new BoxPlot(numList);
@@ -32,9 +34,18 @@ public class Statistics {
 //		this.valorMaximo = Calculations.valorMaximo(numList);
 //		this.boxPlot = new BoxPlot(numList);
 //	}
+	
 
 	public float getMedia() {
 		return media;
+	}
+
+	public float getMediana() {
+		return mediana;
+	}
+
+	public void setMediana(float mediana) {
+		this.mediana = mediana;
 	}
 
 	public String getDataName() {

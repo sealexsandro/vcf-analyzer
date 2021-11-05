@@ -6,17 +6,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.Variant;
-import com.ufrpe.vcfanalyzer.statistics.InfoStatistics;
 import com.ufrpe.vcfanalyzer.statistics.Statistics;
 import com.ufrpe.vcfanalyzer.utils.VariantToken;
 
@@ -193,6 +193,36 @@ public class VcfAnalisis {
 		return variant;
 	}
 
+	/*
+	 * Metodo para organizar em forma de chave e valor, todas as linhas da coluna
+	 * INFO Para cada Campo info do cabeçalho, será pego todos os valores não
+	 * repetidos
+	 */
+	public Map<String, Set<String>> getValuesNoDuplicateInfoCol(List<String> rowsOfInfoCol) {
+
+		Map<String, Set<String>> keyAndValuesMap = new HashMap<>();
+
+		for (String row : rowsOfInfoCol) {
+			String vectorInfo[] = row.split(";");
+			String keyAndValue[];
+
+			for (int i = 0; i < vectorInfo.length; i++) {
+				keyAndValue = vectorInfo[i].split("=");
+
+				if (keyAndValuesMap.containsKey(keyAndValue[0])) {
+					keyAndValuesMap.get(keyAndValue[0]).add(keyAndValue[1]);
+				} else {
+					Set<String> values = new HashSet<>();
+					values.add(keyAndValue[1]);
+					keyAndValuesMap.put(keyAndValue[0], values);
+				}
+			}
+
+		}
+
+		return keyAndValuesMap;
+	}
+
 	public String analizeTipoDeVariacao(String referencia, String alteracao) {
 
 		String alelosAlternativos[] = alteracao.split(",");
@@ -294,26 +324,14 @@ public class VcfAnalisis {
 		return valuesOfFieldInfoOfVariantType;
 	}
 
-	// vai processar igual uma tartaruga aqui em baixo
 	public List<Statistics> statisticsFieldInfo(String fieldInfo, List<Variant> variants) {
 
-//		InfoStatistics infoStatistics;
-
 		Map<String, List<Float>> valuesMap = getValuesOfFieldInfoOfVariantType(fieldInfo, variants);
-//		List<Map<String, Statistics>> infoStatisticsOfVariantType = new ArrayList<>();
 		List<Statistics> fullStatistics = new ArrayList<>();
 		for (Entry<String, List<Float>> entry : valuesMap.entrySet()) {
 			Statistics statistics = new Statistics(fieldInfo, entry.getKey(), entry.getValue());
 			fullStatistics.add(statistics);
 		}
-
-//		infoStatistics = new InfoStatistics(fieldInfo, fullStatistics);
-//		if (valuesOfFieldInfoSNP.size() > 0) {
-//		//	infoStatistics.addInfoSummary(VariantToken.SNP, valuesOfFieldInfoSNP);
-//		}
-//		if (valuesOfFieldInfoINDEL.size() > 0) {
-//			infoStatistics.addInfoSummary(VariantToken.INDEL, valuesOfFieldInfoINDEL);
-//		}
 
 		return fullStatistics;
 	}

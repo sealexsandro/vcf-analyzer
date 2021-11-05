@@ -1,142 +1,27 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Charts from "react-apexcharts/src/react-apexcharts";
+import ReactApexChart from "react-apexcharts";
 
 export const BoxPlot = ({ eixosBoxPlot }) => {
-   const eixos = eixosBoxPlot;
-  // const [eixos, setEixos] = useState([]);
+  const eixos = eixosBoxPlot;
 
-  // useEffect(() => {
-  //   // console.log(tagField)
-  //   axios
-  //     .get(
-  //       `http://localhost:8080/info-statistics?field_info=${tagField}&id=${1}`
-  //     ) // mudar essa requisicao
-  //     .then((response) => {
-  //       const results = response.data;
+  // const fullVariantsTypes = 0;
+  // const indels = 1;
 
-  //       const statisticsOfHeaderTag = [];
-  //       const eixosBoxPlot = [];
-  //       results.forEach((statistics, index) => {
-  //         statisticsOfHeaderTag[index] = {
-  //           index: index,
-  //           dataName: statistics.dataName,
-  //           media: statistics.media,
-  //           valorMinimo: statistics.valorMinimo,
-  //           valorMaximo: statistics.valorMaximo,
-  //           boxPlot: statistics.boxPlot,
-  //         };
-  //         eixosBoxPlot[index] = {
-  //           x: statistics.dataName,
-  //           y: [
-  //             statistics.boxPlot.valorMinimo,
-  //             statistics.boxPlot.primeiroQuartil,
-  //             statistics.boxPlot.mediana,
-  //             statistics.boxPlot.terceiroQuartil,
-  //             statistics.boxPlot.valorMaximo,
-  //           ],
-  //         };
-  //         // console.log(statisticsOfHeaderTag[index].boxPlot)
-  //       });
-  //       setEixos(eixosBoxPlot);
-  //       // setStatistics(statisticsOfHeaderTag);
-  //       // console.log(statisticsOfHeaderTag);
-  //       // chartData();
-  //     });
-  // }, [tagField]);
-
-  // const chartData = () => {
-  //   const data = [];
-  //   // let boxplot = [];
-  //   statistics?.forEach((statisticas, index) => {
-  //     data[index] = {
-  //       x: statisticas.dataName = VariantTypes.fullVariantsTypes? "Todas as Variações": statisticas.dataName,
-  //       y: [
-  //         statisticas.boxPlot.valorMinimo,
-  //         statisticas.boxPlot.primeiroQuartil,
-  //         statisticas.boxPlot.mediana,
-  //         statisticas.boxPlot.terceiroQuartil,
-  //         statisticas.boxPlot.valorMaximo,
-  //       ],
-  //     };
-  //     console.log(data[index]);
-  //   });
-  //   //  setEixos(data);
-  //   // console.log(data);
-  //   return data;
-  // };
   const series = [
     {
       name: "box",
       type: "boxPlot",
       data: eixos,
-      //   data: [
-      //     {
-      //       x: "nnkanknfkd",
-      //       y: [54, 66, 69, 75, 88],
-      //     },
-      //     {
-      //       x: "gfasgasgad",
-      //       y: [54, 66, 69, 75, 88],
-      //     },
-      // ]
-      // data: [
-      //   {
-      //     x: "maria",
-      //     y: [54, 66, 69, 75, 88],
-      //   },
-      //   {
-      //     x: "joão",
-      //     y: [43, 65, 69, 76, 81],
-      //   },
-      //   {
-      //     x: "Enrique",
-      //     y: [31, 39, 45, 51, 59],
-      //   },
-      //   {
-      //     x: "Gaby",
-      //     y: [39, 46, 55, 65, 71],
-      //   },
-      //   {
-      //     x: "Mel",
-      //     y: [29, 31, 35, 39, 44],
-      //   },
-      // ],
-    },
     // {
     //   name: "outliers",
     //   type: "scatter",
     //   data: [
-    //     {
-    //       x: new Date("2017-01-02").getTime(),
-    //       y: 32,
-    //     },
-    //     {
-    //       x: new Date("2017-01-02").getTime(),
-    //       y: 33,
-    //     },
-    //     {
-    //       x: new Date("2018-01-01").getTime(),
-    //       y: 25,
-    //     },
-    //     {
-    //       x: new Date("2019-01-01").getTime(),
-    //       y: 64,
-    //     },
-    //     {
-    //       x: new Date("2020-01-01").getTime(),
-    //       y: 27,
-    //     },
-    //     {
-    //       x: new Date("2020-01-01").getTime(),
-    //       y: 78,
-    //     },
-    //     {
-    //       x: new Date("2021-01-01").getTime(),
-    //       y: 15,
-    //     },
+    //     { x: 0, y: 29 },
+    //     { x: 0, y: 28 },
+    //     // { x: 1, y: 29 },
+    //     // { x: 1, y: 28 },
+    
     //   ],
-    // },
+    },
   ];
   const options = {
     chart: {
@@ -148,14 +33,35 @@ export const BoxPlot = ({ eixosBoxPlot }) => {
       text: "BoxPlot - Scatter Chart",
       align: "left",
     },
-    xaxis: {
-      type: "string",
-      // tooltip: {
-      //   formatter: function (val) {
-      //     return new Date(val).getFullYear();
-      //   },
-      // },
-    },
+    // xaxis: {
+    //   // type: "numeric",
+    //   // categories: [maria,joao],
+    //   // tickAmount: 1,
+    //   labels: {
+    //     formatter: function (val) {
+    //       // console.log("Valor: -> " + val);
+    //       if (val === 0) {
+    //         return maria;
+    //       } else if (val === 1) {
+    //         return joao;
+    //       }
+    //     },
+    //   },
+    //   tooltip: {
+    //     formatter: function (val) {
+    //       // val = parseInt(val);
+    //       // console.log("Valor 2: -> " + val);
+    //       // if (val === 0) {
+    //       //   return maria;
+    //       // }
+    //       // if (val === 1) {
+    //       //   return joao;
+    //       // }
+
+    //       return parseInt(val);
+    //     },
+    //   },
+    // },
     tooltip: {
       shared: false,
       intersect: true,
@@ -163,18 +69,25 @@ export const BoxPlot = ({ eixosBoxPlot }) => {
   };
 
   return (
-    <div>
-      <>
-        {/* <div className="box-statistics  p-3 d-flex flex-wrap align-content-start"> */}
-          <Charts
-            options={options}
-            series={series}
-            type="boxPlot"
-            height={350}
-          />
-          {/* <DataSummaryOfChart /> */}
-        {/* </div> */}
-      </>
+    // <div>
+    //   <>
+    //     {eixos && (
+    //       <Charts
+    //         options={options}
+    //         series={series}
+    //         type="boxPlot"
+    //         height={350}
+    //       />
+    //     )}
+    //   </>
+    // </div>
+    <div id="chart">
+      <ReactApexChart
+        options={options}
+        series={series}
+        type="boxPlot"
+        height={350}
+      />
     </div>
   );
 };

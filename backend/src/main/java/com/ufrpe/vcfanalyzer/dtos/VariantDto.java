@@ -49,7 +49,18 @@ public class VariantDto {
 //		this.format = variant.getFormat();
 //		this.samples = variant.getSamples();
 	}
-	
+
+	public VariantDto(String chrom, Integer position, String idVariant, String reference, String alteration,
+			Double quality, String filter) {
+		this.chrom = chrom;
+		this.position = position;
+		this.idVariant = idVariant;
+		this.reference = reference;
+		this.alteration = alteration;
+		this.quality = quality;
+		this.filter = filter;
+	}
+
 	public VariantDto(String reference, String alteration, String infoCol) {
 		this.reference = reference;
 		this.alteration = alteration;

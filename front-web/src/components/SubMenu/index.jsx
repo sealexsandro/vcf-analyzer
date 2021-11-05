@@ -1,40 +1,33 @@
 import { Link } from "react-router-dom";
-import './styles.css'
+import "./styles.css";
 
-export const SubMenu = () => {
+export const SubMen = () => {
   return (
-    <div className="container-fluid d-flex flex-row-reverse">
-      <nav className="navbar">
-        {/* <div className="d-flex flex-row"> */}
-        <ul className="d-flex flex-row menu-list">
-          <li className="item-lista">
-            {/* <button
-              type="button"
-              className="btn btn-info btn-spacing"
-              onClick={""}
-            >
-              Tabela de Variantes
-            </button> */}
-            <Link className="btn btn-info btn-spacing" to="/table-variants">
-              Tabela de Variantes
-            </Link>
-          </li>
-          <li className="item-lista">
-            {/* <button
-              type="button"
-              className="btn btn-info btn-spacing"
-              onClick={""}
-            >
-              Estatísticas
-            </button> */}
-            {/* <a href="#">Estatísticas</a> */}
-            <Link className="btn btn-info btn-spacing" to="/statistics">
-              Estatísticas
-            </Link>
-          </li>
-        </ul>
-        {/* </div> */}
-      </nav>
+    <div className="container-fluid d-flex flex-row ">
+      <div className="col container-menu">
+        <nav className="d-flex navbar navbar-light bg-light nav-menu">
+          <h5 className="d-flex">Tabela de Variantes</h5>
+          <ul className="lista-de-botoes d-flex flex-row menu-list">
+            {/* <li className="item-lista">
+              <Link className="btn btn-info btn-spacing" to="/table-variants">
+                Tabela de Variantes
+              </Link>
+            </li> */}
+            <li className="item-lista">
+              <Link className="btn btn-info btn-spacing botoes">Filtrar Variantes</Link>
+            </li>
+            <li className="item-lista">
+              <Link className="btn btn-info btn-spacing botoes">
+                Add Coluna
+              </Link>
+            </li>
+
+            <li className="item-lista">
+              <Link className="btn btn-info btn-spacing botoes">Exportar</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 };

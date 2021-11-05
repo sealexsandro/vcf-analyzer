@@ -13,5 +13,5 @@ import com.ufrpe.vcfanalyzer.domain.TagHeader;
 public interface TagHeaderVcfRepository extends JpaRepository<TagHeader, Integer> {
 
 	@Query(value = "select * from tag_header tag where tag.filevcf_id = :id and tag.name_tag like '%INFO' order by tag.id_tag asc", nativeQuery = true)
-	List<TagHeader> getTagsHeaderByIdVcf(@Param(value = "id") Integer id);
+	List<TagHeader> getTagsInfoHeaderByIdVcf(@Param(value = "id") Integer id);
 }

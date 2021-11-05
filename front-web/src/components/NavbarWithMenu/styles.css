@@ -1,0 +1,21 @@
+.nav-container {
+  padding-left: 2.5rem !important;
+  padding-bottom: 10px !important;
+}
+.logo {
+  margin-right: 3rem;
+  text-decoration: none;
+}
+
+.text-botoes {
+  font-size: 13pt;
+}
+
+.div-navbar {
+  /* width: 80%; */
+  padding-left: 0;
+}
+
+.menu-link {
+  text-decoration: none;
+}
