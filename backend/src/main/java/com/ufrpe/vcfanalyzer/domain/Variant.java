@@ -29,25 +29,12 @@ public class Variant implements Serializable{
 	// Desisti dessa forma, pois o mapeamento pelo hibernate fica complicado
 //	private Map<String, String> infoCol; 
 	
-//	@ElementCollection
-//	@CollectionTable(name = "InfoColumn")
-//	@Column(name = "info", columnDefinition="text")
-//	private List<String> infoCol;
 	@Column(columnDefinition="text")
 	private String infoCol;
-	
-//	@ElementCollection
-//	@CollectionTable(name = "samples")
-//	@Column(name = "sample", columnDefinition="text")
-//	private List<String> samples;
-	
+		
 	@Column(columnDefinition="text")
 	private String samples;
 	
-//	@ElementCollection
-//	@CollectionTable(name = "Samples")
-//	@MapKeyColumn(name = "sample_key")
-//	private Map<String, String> samples; 
 
 	public Variant() {
 		// TODO Auto-generated constructor stub

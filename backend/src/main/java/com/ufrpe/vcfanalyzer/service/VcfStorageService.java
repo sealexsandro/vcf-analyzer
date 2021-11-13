@@ -56,6 +56,13 @@ public class VcfStorageService {
 		return result.map(obj -> new VariantDto(obj));
 	}
 
+	public List<VariantDto> findAllVariantsByVcfId(Integer idvcf) {
+		List<Variant> variantsResult = variantRepository.findAllVariantsByVcfId(idvcf);
+		List<VariantDto> variantsDto = variantsResult.stream().map(variant -> new VariantDto(variant))
+				.collect(Collectors.toList());
+		return variantsDto;
+	}
+
 	@Modifying
 	@Transactional
 	public Page<VariantDto> findByFileId(Integer idvcf, Pageable pageable) {
@@ -73,16 +80,6 @@ public class VcfStorageService {
 		// return result;
 	}
 
-//	public /* List<VariantDto> */ void findAllVariantsToInfoStatics(Integer idvcf) {
-//		List<TagHeader> TagResult = tagRepository.getTagsHeaderByIdVcf(idvcf);
-//		List<Variant> variantsResult = variantRepository.findAllVariantsByIdVcfToInfoStatics(idvcf);
-////		List<VariantDto> variantDtoResult = variantsResult.stream()
-////				.map(obj -> new VariantDto(obj.getReference(), obj.getAlteration(), obj.getInfoCol()))
-////				.collect(Collectors.toList());
-//		FileVcfDataDto vcfDataDto = new FileVcfDataDto(TagResult, variantsResult);
-//		// return result.map(obj -> new VariantDto(obj));
-//	}
-
 	public void saveFile(MultipartFile multipart) throws IOException {
 
 		InputStream stream = new BufferedInputStream(multipart.getInputStream());
@@ -99,13 +96,13 @@ public class VcfStorageService {
 	}
 
 	public Map<String, Integer> getVariantsTypes(Integer idvcf) {
-		List<Variant> variantsResult = variantRepository.getVariantsById(idvcf);
+		List<Variant> variantsResult = variantRepository.findAllVariantsByVcfId(idvcf);
 		Map<String, Integer> variantsTypes = vcfAnalisis.variantsTypesSummary(variantsResult);
 		return variantsTypes;
 	}
 
 	public List<Statistics> statisticsFieldInfo(String fieldInfo, Integer idvcf) {
-		List<Variant> variantsResult = variantRepository.getVariantsById(idvcf);
+		List<Variant> variantsResult = variantRepository.findAllVariantsByVcfId(idvcf);
 		List<Statistics> infoStatistics = vcfAnalisis.statisticsFieldInfo(fieldInfo, variantsResult);
 		return infoStatistics;
 	}
@@ -119,12 +116,6 @@ public class VcfStorageService {
 
 	@Transactional
 	public Map<String, List<String>> getVariantsOfAttributesNotDuplicatesById(Integer idVcf) {
-
-//		List<Variant> variants = variantRepository.getVariantsOfAttributesNotDuplicatesById(idVcf);
-//		List<VariantDto> variantsDto = variants
-//				.stream().map(obj -> new VariantDto(obj.getChrom(), obj.getPosition(), obj.getId_variant(),
-//						obj.getReference(), obj.getAlteration(), obj.getQuality(), obj.getFilter()))
-//				.collect(Collectors.toList());
 
 		Map<String, List<String>> atributesMap = new HashMap<>();
 
@@ -144,20 +135,25 @@ public class VcfStorageService {
 	}
 
 	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) {
-		
+
 		List<String> infoCol = this.variantRepository.getInfoColById(idVcf);
 		Map<String, Set<String>> keyAndValuesOfInfoCol = this.vcfAnalisis.getValuesNoDuplicateInfoCol(infoCol);
 
 		return keyAndValuesOfInfoCol;
 	}
 
-	
 	@Transactional
-	public Page<VariantDto> getVariantsByFields(String chrom, Integer position, String reference, String alteration,
-			String info_field, Integer idvcf, Pageable pageable) {
-//		System.out.println("ID ----> " + idvcf);
-		Page<Variant> result = variantRepository.getVariantsByFilds(chrom, position, reference, alteration, info_field, idvcf, pageable);
+	public Page<VariantDto> findPageVariantsByFilds(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {
+		Page<Variant> result = variantRepository.findPageVariantsByFilds(filtersMap, idvcf, pageable);
 		return result.map(obj -> new VariantDto(obj));
 	}
-	
+
+	@Transactional
+	public List<VariantDto> findAllVariantsByFields(Map<String, String> filters, Integer idvcf) {
+		List<Variant> variantsResult = variantRepository.findAllVariantsByFilds(filters, idvcf);
+		List<VariantDto> variantsDto = variantsResult.stream().map(variant -> new VariantDto(variant))
+				.collect(Collectors.toList());
+		return variantsDto;
+	}
+
 }

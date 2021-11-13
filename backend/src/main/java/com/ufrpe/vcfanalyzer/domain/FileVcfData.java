@@ -30,7 +30,7 @@ public class FileVcfData implements Serializable {
 	// CABEÇALHO DO VCF
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "filevcf_id")
-	private List<TagHeader> tagsCabecalho;
+	private List<TagHeader> tagsInfo;
 
 	// Corpo do vcf, linhas com todas as variantes
 	@OneToMany(cascade = CascadeType.ALL)
@@ -38,39 +38,31 @@ public class FileVcfData implements Serializable {
 	private List<Variant> variants;
 
 	public FileVcfData() {
-		this.tagsCabecalho = new ArrayList<TagHeader>();
+		this.tagsInfo = new ArrayList<TagHeader>();
 		this.variants = new ArrayList<Variant>();
 	}
 
 	public FileVcfData(List<TagHeader> tagsCabecalho, List<Variant> variants) {
-		this.tagsCabecalho = tagsCabecalho;
+		this.tagsInfo = tagsCabecalho;
 		this.variants = variants;
 	}
 
 	public void addTagCabecalho(TagHeader tagHeader) {
-		this.tagsCabecalho.add(tagHeader);
+		this.tagsInfo.add(tagHeader);
 	}
 
 	public void addBodyRow(Variant variant) {
 		this.variants.add(variant);
 	}
 
-	public List<TagHeader> getTagsCabecalho() {
-		return tagsCabecalho;
+	public List<TagHeader> getTagsInfo() {
+		return tagsInfo;
 	}
 
-	public void setTagsCabecalho(List<TagHeader> tagsCabecalho) {
-		this.tagsCabecalho = tagsCabecalho;
+	public void setTagsInfo(List<TagHeader> tagsInfo) {
+		this.tagsInfo = tagsInfo;
 	}
 
-//	public List<Variant> getRowsBodyVcf() {
-//		return variants;
-//	}
-
-//	public void setRowsBodyVcf(List<Variant> rowsBodyVcf) {
-//		this.variants = rowsBodyVcf;
-//	}
-//	
 	public Integer getId() {
 		return id;
 	}

@@ -16,7 +16,7 @@ export const StatisticsCharts = () => {
     description: "",
   });
 
-  const [dashComponent, setDashComponent] = useState(chartComponents.VARIANT_QUALITY);
+  const [dashComponent, setDashComponent] = useState(chartComponents.VARIANT_TYPES);
 
   // const dashPageComponent = () => {
   //   if (dashComponent === 0) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
+import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
@@ -40,9 +41,15 @@ public class FileController {
 	}
 
 	@GetMapping(value = "/files")
-	public ResponseEntity<Page<VariantDto>> findAll(Pageable pageable) {
+	public ResponseEntity<Page<VariantDto>> findAllVariants(Pageable pageable) {
 		Page<VariantDto> list = vcfService.findAll(pageable);
 		return ResponseEntity.ok(list);
+	}
+
+	@GetMapping(value = "/allvariants", params = "idvcf")
+	public ResponseEntity<List<VariantDto>> findAllVariantsByVcfId(@RequestParam Integer idvcf) {
+		List<VariantDto> variantsDto = vcfService.findAllVariantsByVcfId(idvcf);
+		return ResponseEntity.ok(variantsDto);
 	}
 
 	@GetMapping(value = "/filesgetbyid", params = "id")
@@ -95,13 +102,16 @@ public class FileController {
 		return ResponseEntity.ok(atributesInfoColMap);
 	}
 
-	@GetMapping(value = "/getfilesbyfilds", params = { "chrom", "position", "reference", "alteration", "info_field",
-			"id" })
-	public ResponseEntity<Page<VariantDto>> getVariantsByFilds(@RequestParam String chrom,
-			@RequestParam Integer position, @RequestParam String reference, @RequestParam String alteration,
-			@RequestParam String info_field, @RequestParam Integer id, Pageable pageable) {
-		Page<VariantDto> list = vcfService.getVariantsByFields(chrom, position, reference, alteration, info_field, id,
-				pageable);
-		return ResponseEntity.ok(list);
+	@GetMapping(value = "/pagevariantsbyfields")
+	public ResponseEntity<Page<VariantDto>> findPageVariantsByFilds(@RequestParam Map<String, String> filtersMap, @RequestParam Integer idvcf, Pageable pageable) {
+		Page<VariantDto> variants = vcfService.findPageVariantsByFilds(filtersMap, idvcf, pageable);
+		return ResponseEntity.ok(variants);
+	}
+
+	@GetMapping(value = "/allvariantsbyfields")
+	public ResponseEntity<List<VariantDto>> findAllVariantsByFilds(@RequestParam Map<String, String> filtersMap,
+			@RequestParam Integer idvcf) {
+		List<VariantDto> variants = vcfService.findAllVariantsByFields(filtersMap, idvcf);
+		return ResponseEntity.ok(variants);
 	}
 }

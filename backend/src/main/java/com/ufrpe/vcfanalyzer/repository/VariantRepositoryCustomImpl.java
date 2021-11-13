@@ -1,6 +1,7 @@
 package com.ufrpe.vcfanalyzer.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,48 +19,82 @@ public class VariantRepositoryCustomImpl implements VariantRepositoryCustom {
 	private EntityManager entityManager;
 
 	@Override
-	public Page<Variant> getVariantsByFilds(String chrom, Integer posicao, String reference, String alteration,
-			String valueInfoField, Integer idvcf, Pageable pageable) {
+	public Page<Variant> findPageVariantsByFilds(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {
 
 		StringBuilder consulta = new StringBuilder("select * from variant v where v.filevcf_id = " + idvcf);
 
-		if (!chrom.equalsIgnoreCase("")) {
-			chrom = colocaAspasSimples(chrom);
-			consulta.append(" and v.chrom =").append(chrom);
-		}
-		if (posicao > -1) {
-			consulta.append(" and v.position = ").append(posicao);
-		}
-		if (!reference.equalsIgnoreCase("")) {
-			reference = colocaAspasSimples(reference);
-			consulta.append(" and v.reference =").append(reference);
-		}
-		if (!alteration.equalsIgnoreCase("")) {
-			alteration = colocaAspasSimples(alteration);
-			consulta.append(" and v.alteration =").append(alteration);
-		}
-		if (!valueInfoField.equalsIgnoreCase("")) {
-			consulta.append(" and v.info_col ilike '%").append(valueInfoField).append("%'");
+		for (Map.Entry<String, String> entry : filtersMap.entrySet()) {
+
+			if (entry.getKey().toLowerCase().equalsIgnoreCase("chrom")) {
+				String chrom = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.chrom =").append(chrom);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("reference")) {
+				String reference = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.reference =").append(reference);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("alteration")) {
+				String alteration = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.alteration =").append(alteration);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("filter")) {
+				String filter = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.alteration =").append(filter);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("info")) {
+				String infoKeyAndValue[] = entry.getValue().split("-");
+				String info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
+				consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");
+			}
+
 		}
 
-//		List<Variant> variants = entityManager.createNativeQuery(consulta.toString(), Variant.class).getResultList();
-//		Integer numberOfElements = (Integer) entityManager
-//				.createNativeQuery("select cast(count(*) as int) from variant v where v.filevcf_id = " + idvcf)
-//				.getSingleResult();
-		
 		Query query = entityManager.createNativeQuery(consulta.toString(), Variant.class);
-		
-		Integer numberOfElements  = query.getResultList().size();
+
+		Integer numberOfElements = query.getResultList().size();
 		query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 
 		Page<Variant> results = new PageImpl<Variant>(query.getResultList(), pageable, numberOfElements);
-//		Page<Variant> results = new PageImpl<Variant>(variants, pageable, 76);
 
-		System.out.println("Numero da Page: " + pageable.getPageNumber());
-		System.out.println("Numero de itens per page: " + pageable.getPageSize());
-		System.out.println("Numero Total de Elemntos: " + numberOfElements);
+//		System.out.println("Numero da Page: " + pageable.getPageNumber());
+//		System.out.println("Numero de itens per page: " + pageable.getPageSize());
+//		System.out.println("Numero Total de Elemntos: " + numberOfElements);
 		return results;
+	}
+
+	@Override
+	public List<Variant> findAllVariantsByFilds(Map<String, String> filtersMap, Integer idvcf) {
+
+		StringBuilder consulta = new StringBuilder("select * from variant v where v.filevcf_id = " + idvcf);
+
+		for (Map.Entry<String, String> entry : filtersMap.entrySet()) {
+			System.out.println(entry.getKey() + "/" + entry.getValue());
+
+			if (entry.getKey().toLowerCase().equalsIgnoreCase("chrom")) {
+				String chrom = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.chrom =").append(chrom);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("reference")) {
+				String reference = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.reference =").append(reference);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("alteration")) {
+				String alteration = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.alteration =").append(alteration);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("filter")) {
+				String filter = colocaAspasSimples(entry.getValue());
+				consulta.append(" and v.alteration =").append(filter);
+			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("info")) {
+				String infoKeyAndValue[] = entry.getValue().split(":");
+
+				String info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
+				System.out.println("INFO: "+info);
+
+				consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");
+			}
+
+		}
+
+		Query query = entityManager.createNativeQuery(consulta.toString(), Variant.class);
+
+		@SuppressWarnings("unchecked")
+		List<Variant> variants = query.getResultList();
+		return variants;
 	}
 
 	private String colocaAspasSimples(String field) {

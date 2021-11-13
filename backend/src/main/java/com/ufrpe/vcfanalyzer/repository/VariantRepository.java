@@ -27,7 +27,7 @@ public interface VariantRepository extends JpaRepository<Variant, Integer>, Vari
 //	List<VariantDto> findAllVariantsByIdVcfToInfoStatics();
 
 	@Query(value = "SELECT * FROM variant v where v.filevcf_id = :id", nativeQuery = true)
-	List<Variant> getVariantsById(@Param(value = "id") Integer id);
+	List<Variant> findAllVariantsByVcfId(@Param(value = "id") Integer id);
 
 //	@Query(value = "select distinct v.chrom, v.position, v.id_variant, v.reference, v.alteration, v.quality, v.filter from variant v where v.filevcf_id = :id", nativeQuery = true)
 //	List<Variant> getVariantsOfAttributesNotDuplicatesById(@Param(value = "id") Integer id);

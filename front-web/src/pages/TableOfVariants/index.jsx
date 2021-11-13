@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Tab, Tabs } from "react-bootstrap-tabs";
+// import { Tab, Tabs } from "react-bootstrap-tabs";
 import { DataTable } from "../../components/DataTable";
+import { ExportButton } from "../../components/ExportButton";
 import Footer from "../../components/Footer";
 import { NavBarWithMenu } from "../../components/NavbarWithMenu";
-
+import Pagination from "../../components/Pagination";
+import { findVisibleColumns, displayColumns } from "../../utils/displayColumns";
+import { HeaderFields, HeaderFieldsList } from "../../utils/tokens";
+// import { HeaderFields, HeaderFieldsList } from "../../utils/tokens";
 import {
   convertStringForNumber,
   isNumberList,
@@ -15,34 +19,38 @@ import "../TableOfVariants/styles.css";
 
 export const TableOfVariants = () => {
   const [showModalFilter, setShowModalFilter] = useState(false);
-  const [fullFieldsValues, setFullFieldsValues] = useState({
-    alteration: [],
-    chrom: [],
-    filter: [],
-    quality: [],
-    reference: [],
-  });
+  const [fullFieldsValues, setFullFieldsValues] = useState({});
 
   const [infoValues, setInfoValues] = useState([]);
 
-  const [selectchrom, setSelectChrom] = useState("");
-  const [selectReference, setSelectReference] = useState("");
-  const [selectAlteration, setSelectAlteration] = useState("");
-  const [selectFilter, setSelectFilter] = useState("");
+  // const [selectchrom, setSelectChrom] = useState("");
+  // const [selectReference, setSelectReference] = useState("");
+  // const [selectAlteration, setSelectAlteration] = useState("");
+  // const [selectFilter, setSelectFilter] = useState("");
   const [selectFieldInfoKey, setSelectFieldInfoKey] = useState("");
   const [selectInfoFieldValue, setSelectInfoFieldValue] = useState("");
-  const [infoFieldKeyAndValue, setInfoFieldKeyAndValue] = useState("");
 
+  const [activePage, setActivePage] = useState(0);
+  const [firstPage, setFirstPage] = useState(true);
+  const [lastPage, setLastPage] = useState(true);
+  const [numberPage, setNumberPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [variantsPage, setVariantsPage] = useState([]);
+  const [allVisibleColumns, setAllVisibleColumns] = useState(new Map());
+  const [visibleCols, setVisibleCols] = useState(new Map());
+  const [visibleColsInfo, setVisibleColsInfo] = useState(new Map());
+
+  const [tableFilters, setTableFilters] = useState(new Map());
 
   const handleClose = () => setShowModalFilter(false);
   const handleShow = () => setShowModalFilter(true);
+  const initValueOption = "-----";
 
   const loadAttribVariants = () => {
     axios
       .get(`http://localhost:8080/variants-by-unique-attributes?id=${1}`)
       .then((response) => {
         const result = response.data;
-
         setFullFieldsValues({
           alteration: result.alteration,
           chrom: result.chrom,
@@ -54,11 +62,13 @@ export const TableOfVariants = () => {
   };
 
   const loadFildsAndValuesColInfo = () => {
+    // const keys = [];
     axios
       .get(`http://localhost:8080/info-attributes?id=${1}`)
       .then((response) => {
         const result = response.data;
         const infoFields = [];
+        const keys = [];
 
         let index = 0;
         for (var key in result) {
@@ -88,92 +98,243 @@ export const TableOfVariants = () => {
     loadFildsAndValuesColInfo();
   }, []);
 
+  useEffect(() => {
+    // let requisicao = `http://localhost:8080/getfilesbyfilds?page=${activePage}&sort=id&size=10&chrom=${selectchrom}&position=${-1}&reference=${selectReference}&alteration=${selectAlteration}&info_field=${infoFieldKeyAndValue}&id=${1}`;
+    // let requisicao = `http://localhost:8080/getfilesbyfilds?page=${activePage}&sort=id&size=10`;
+
+    let filters = "";
+    tableFilters.forEach(function (value, key) {
+      if (key !== HeaderFields.INFO && value !== "" && value !== initValueOption) {
+        if(filters !== ""){
+          filters += "&";
+        }
+        filters += key + "=" + value;
+      } else {
+        if (value !== "" && value !== initValueOption) {
+          if(filters !== ""){
+            filters += "&";
+          }
+          let infoKeyValue = value.split("=");
+          filters += key + "=" + infoKeyValue[0] + "-" + infoKeyValue[1];
+        }
+      }
+      console.log("Filters: ", filters);
+    });
+    // let requisicao = `http://localhost:8080/variantsbyfilds?${filters}&idvcf=${1}`;
+    let requisicao = `http://localhost:8080/pagevariantsbyfields?page=${activePage}&sort=idvcf&size=10&${filters}&idvcf=${1}`;
+
+    // let requisicao = `http://localhost:8080/pagevariantsbyfields?${filters}&idvcf=${1}`;
+
+    axios
+      .get(
+        requisicao
+        // `http://localhost:8080/filesgetbyid?id=${1}&page=${activePage}&sort=id&size=10`
+      )
+      .then((response) => {
+        const results = response.data;
+        // console.log(results)
+        setFirstPage(results.first);
+        setLastPage(results.last);
+        setNumberPage(results.number);
+        setTotalPages(results.totalPages);
+        const variants = results.content;
+        const variantData = [];
+
+        variants.forEach((variant, index) => {
+          // console.log(variant)
+          variantData[index] = {
+            index: index,
+            chrom: variant.chrom,
+            position: variant.position,
+            idVariant: variant.idVariant,
+            reference: variant.reference,
+            alteration: variant.alteration,
+            quality: variant.quality,
+            filter: variant.filter,
+            format: variant.format,
+            samples: variant.samples,
+            infoCol: new Map(Object.entries(variant.infoCol)),
+          };
+        });
+        setVariantsPage(variantData);
+        //  console.log(variantData);
+        // console.log("Pegando mais dados do banco");
+      });
+  }, [activePage, tableFilters]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/tagsInfobyidvcf?id=${1}`)
+      .then((response) => {
+        const results = response.data;
+
+        // let allColumns = displayColumns();
+        let visibleCols = findVisibleColumns();
+
+        // let markColsInfo = new Map();
+        let colsInfo = new Map();
+
+        results.forEach((tag, index) => {
+          colsInfo.set(tag.idTag, false);
+          // markColsInfo.set(tag.idTag, {
+          //   name: tag.idTag,
+          //   display: false,
+          // });
+        });
+        setVisibleColsInfo(colsInfo);
+        // allColumns.set(HeaderFields.INFO, markColsInfo);
+        // setAllColumns(allColumns);
+        setVisibleCols(visibleCols);
+        setAllVisibleColumns(new Map([...visibleCols, ...colsInfo]));
+        // console.log("Colunas visiveis: ", allVisibleColumns)
+      });
+  }, []);
+
+  const changePage = (numberOfPage) => {
+    setActivePage(numberOfPage);
+  };
+
+  const makeColumnVisible = (nameColumn) => {
+    // console.log(nameColumn);
+    if (visibleCols.get(nameColumn)) {
+      visibleCols.set(nameColumn, false);
+      allVisibleColumns.set(nameColumn, false);
+    } else {
+      visibleCols.set(nameColumn, true);
+      allVisibleColumns.set(nameColumn, true);
+    }
+    console.log("Colunas visiveis: ", allVisibleColumns);
+  };
+
+  const makeColumnInfoVisible = (nameColumn) => {
+    console.log(nameColumn);
+    if (visibleColsInfo.get(nameColumn)) {
+      visibleColsInfo.set(nameColumn, false);
+      allVisibleColumns.set(nameColumn, false);
+    } else {
+      visibleColsInfo.set(nameColumn, true);
+      allVisibleColumns.set(nameColumn, true);
+    }
+    console.log("Colunas visiveis: ", allVisibleColumns);
+  };
+
+  const checkVisibility = (column) => {
+    if (column !== HeaderFields.INFO) {
+      return visibleCols.get(column);
+    }
+    return false;
+  };
+
+  const checkVisibilityInfoCol = (column) => {
+    if (column !== HeaderFields.INFO) {
+      return visibleColsInfo.get(column);
+    }
+    return false;
+  };
+
   const renderModal = () => {
     return (
       <>
         {showModalFilter && (
           <Modal
-            size="lg"
+            // size="sm"
+            dialogClassName="modal-90w"
             show={showModalFilter}
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Filtros</Modal.Title>
+              <Modal.Title className="container-fluid">Colunas</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Tabs
-                onSelect={(index, label) => console.log(label + " selected")}
-              >
-                <Tab label="Anotações">
-                  <div className="d-flex flex-column filtros">
-                    <div className="d-flex flex-row"></div>
-                    <hr />
-                    {/* --------------------- */}
-
-                    <div className="d-flex flex-row">
-                      <label className="label-filtro">Todos os Campos</label>
-
-                      <button className="btn btn-info col select-filter">
-                        Filtrar
-                      </button>
-                    </div>
-                    <hr />
+              {/* <div className="d-flex flex-column filtros"> */}
+              <div className="container-fluid">
+                <div className="d-flex flex-row visible-columns">
+                  <div className="container p-2">
+                    <ul className="list-infofields">
+                      {HeaderFieldsList.map(
+                        (header) =>
+                          header !== HeaderFields.INFO && (
+                            <li>
+                              <label>
+                                <input
+                                  type="checkbox"
+                                  defaultChecked={checkVisibility(header)}
+                                  onChange={() => makeColumnVisible(header)}
+                                />
+                                {header}
+                              </label>
+                            </li>
+                          )
+                      )}
+                    </ul>
                   </div>
-                </Tab>
-                <Tab label="SQL Personalizado">Tab 2 content</Tab>
-              </Tabs>
+                  <div className="container-fluid p-2">
+                    <label>Campos INFO</label>
+                    <ul className="columns-scrollable border h-100">
+                      {infoValues?.map((field, index) => (
+                        <li className="">
+                          <label>
+                            <input
+                              type="checkbox"
+                              defaultChecked={checkVisibilityInfoCol(
+                                field.infoField
+                              )}
+                              onChange={() =>
+                                makeColumnInfoVisible(field.infoField)
+                              }
+                            />
+                            {field.infoField}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </Modal.Body>
             <Modal.Footer>
-              <button className="btn btn-info" onClick={() => handleClose}>
+              <button className="btn btn-info" onClick={() => handleClose()}>
                 Close
               </button>
-              {/* <button className="btn btn-info">Understood</button> */}
             </Modal.Footer>
           </Modal>
         )}
       </>
-      // </div>
     );
   };
 
   const configureKeyAnValueOfInfoField = (infoKey) => {
     setSelectFieldInfoKey(infoKey);
-    // infoValues.forEach((field) => {
-    //   if (field.infoField === infoKey) {
-    //     if (field.value.length > 0) {
-    //      setSelectInfoFieldValue(field.value[0]);
-    //       setInfoFieldKeyAndValue(`${infoKey}=${field.value[0]}`);
-    //     }
-    //   }
-    // });
   };
 
   const configureValueOfInfoField = (infoValue) => {
     if (infoValue !== "") {
       setSelectInfoFieldValue(infoValue);
-      setInfoFieldKeyAndValue(`${selectFieldInfoKey}=${infoValue}`);
+      const keyAndValue = `${selectFieldInfoKey}=${infoValue}`;
+      // setInfoFieldKeyAndValue(keyAndValue);
+      let filters = tableFilters;
+      filters.set(HeaderFields.INFO, keyAndValue);
+      setTableFilters(new Map([...filters]));
     }
   };
 
-  const filtros = () => {
-    <div className="alert alert-success" role="alert">
-      <strong>Aqui tem um filtro por alguma coisa</strong>
-      <button type="button" className="btn-close" aria-label="Close">
-        {/* <span aria-hidden="true">×</span> */}
-      </button>
-    </div>;
-  };
-
   const limparFilters = () => {
-    setSelectChrom("");
-    setSelectReference("");
-    setSelectAlteration("");
-    setSelectFilter("");
     setSelectFieldInfoKey("");
     setSelectInfoFieldValue("");
-    setInfoFieldKeyAndValue("");
+    let filters = tableFilters;
+
+    tableFilters.forEach(function (value, key) {
+      filters.set(key, "");
+    });
+    setTableFilters(new Map([...filters]));
+  };
+
+  const addTableFilter = (key, value) => {
+    let filters = tableFilters;
+    filters.set(key, value);
+    setTableFilters(new Map([...filters]));
   };
   return (
     <>
@@ -188,16 +349,26 @@ export const TableOfVariants = () => {
               <li className="item-lista">
                 <button
                   className="btn btn-md btn-primary shadow-none butao"
-                  onClick={() => setShowModalFilter(true)}
+                  onClick={() => handleShow()}
                 >
                   Add Coluna
                 </button>
               </li>
 
               <li className="item-lista">
-                <button className="btn btn-md btn-primary shadow-none butao">
-                  Exportar
-                </button>
+                {allVisibleColumns.size > 0 && variantsPage.length > 0 ? (
+                  <ExportButton
+                    fullheaders={allVisibleColumns}
+                    headers={visibleCols}
+                    headersInfo={visibleColsInfo}
+                    data={variantsPage}
+                    fileName={"Meu arquivo"}
+                  />
+                ) : (
+                  <button className="btn btn-md btn-primary shadow-none butao">
+                    Exportar
+                  </button>
+                )}
               </li>
             </ul>
           </nav>
@@ -217,14 +388,17 @@ export const TableOfVariants = () => {
                   <div className="d-flex flex-column pb-3">
                     <label className="label-filter">Chrom</label>
                     <select
-                      defaultValue=""
-                      value={selectchrom}
+                      // value={selectchrom}
+                      // onChange={(e) => {
+                      //   setSelectChrom(e.target.value);
+                      // }}
+                      value={tableFilters.get(HeaderFields.CHROM)}
                       onChange={(e) => {
-                        setSelectChrom(e.target.value);
+                        addTableFilter(HeaderFields.CHROM, e.target.value);
                       }}
                       className="select-filter"
                     >
-                      <option key={0}></option>
+                      <option key={0}>{initValueOption}</option>
                       {fullFieldsValues.chrom?.map((attrib, index) => (
                         <option className="option-filter" key={index + 1}>
                           {attrib}
@@ -235,14 +409,17 @@ export const TableOfVariants = () => {
                   <div className="d-flex flex-column pb-3">
                     <label className="label-filter">Reference</label>
                     <select
-                      defaultValue=""
-                      value={selectReference}
+                      // value={selectReference}
+                      // onChange={(e) => {
+                      //   setSelectReference(e.target.value);
+                      // }}
+                      value={tableFilters.get(HeaderFields.REF)}
                       onChange={(e) => {
-                        setSelectReference(e.target.value);
+                        addTableFilter(HeaderFields.REF, e.target.value);
                       }}
                       className="select-filter"
                     >
-                      <option key={0}></option>
+                      <option key={0}>{initValueOption}</option>
                       {fullFieldsValues.reference?.map((attrib, index) => (
                         <option className="option-filter" key={index + 1}>
                           {attrib}
@@ -253,14 +430,17 @@ export const TableOfVariants = () => {
                   <div className="d-flex flex-column pb-3">
                     <label className="label-filter">Alteration</label>
                     <select
-                      defaultValue=""
-                      value={selectAlteration}
+                      // value={selectAlteration}
+                      // onChange={(e) => {
+                      //   setSelectAlteration(e.target.value);
+                      // }}
+                      value={tableFilters.get(HeaderFields.ALT)}
                       onChange={(e) => {
-                        setSelectAlteration(e.target.value);
+                        addTableFilter(HeaderFields.ALT, e.target.value);
                       }}
                       className="select-filter"
                     >
-                      <option className="option-filter" key={0}></option>
+                      <option className="option-filter" key={0}>{initValueOption}</option>
                       {fullFieldsValues.alteration?.map((attrib, index) => (
                         <option className="option-filter" key={index + 1}>
                           {attrib}
@@ -271,14 +451,17 @@ export const TableOfVariants = () => {
                   <div className="d-flex flex-column pb-3">
                     <label className="label-filter">Filter</label>
                     <select
-                      defaultValue=""
-                      value={selectFilter}
+                      // value={selectFilter}
+                      // onChange={(e) => {
+                      //   setSelectFilter(e.target.value);
+                      // }}
+                      value={tableFilters.get(HeaderFields.FILTER)}
                       onChange={(e) => {
-                        setSelectFilter(e.target.value);
+                        addTableFilter(HeaderFields.FILTER, e.target.value);
                       }}
                       className="select-filter"
                     >
-                      <option className="option-filter" key={0}></option>
+                      <option className="option-filter" key={0}>{initValueOption}</option>
                       {fullFieldsValues.filter?.map(
                         (filter, index) =>
                           filter !== "." && (
@@ -292,34 +475,31 @@ export const TableOfVariants = () => {
                     <label className="label-filter">Campo Info</label>
                     <div className="d-flex flex-row">
                       <select
-                        defaultValue=""
+                        // defaultValue=""
                         // onChange={(e) => setSelectFieldInfoKey(e.target.value)}
                         value={selectFieldInfoKey}
                         onChange={(e) => {
-                          configureKeyAnValueOfInfoField(e.target.value);
+                          setSelectFieldInfoKey(e.target.value);
                         }}
                         className="select-filter"
                       >
-                        <option key={0}></option>
+                        <option key={0}>{initValueOption}</option>
                         {infoValues?.map((field, index) => (
                           <option className="option-filter" key={index + 1}>
                             {field.infoField}
                           </option>
                         ))}
                       </select>
-                      <select defaultValue="" className="select-filter">
-                        <option className="option-filter">=</option>
-                      </select>
+                      <label className="label-igualdade">=</label>
 
                       <select
-                        defaultValue=""
                         value={selectInfoFieldValue}
                         onChange={(e) => {
                           configureValueOfInfoField(e.target.value);
                         }}
                         className="select-filter label-filter"
                       >
-                        <option className="option-filter" key={0}></option>
+                        <option className="option-filter" key={0}>{initValueOption}</option>
                         {infoValues?.map(
                           (field) =>
                             field.infoField === selectFieldInfoKey &&
@@ -345,24 +525,28 @@ export const TableOfVariants = () => {
               </div>
               {/* Fim do Container de Filtros */}
 
-              <div className="col d-flex flex-column variants-table">
-                <DataTable
-                  chrom={selectchrom}
-                  reference={selectReference}
-                  alteration={selectAlteration}
-                  filter={selectFilter}
-                  infoFieldKeyAndValue={infoFieldKeyAndValue}
-                />
-              </div>
+              {variantsPage.length > 0 && visibleCols.size > 0 ? (
+                <div className="col d-flex flex-column variants-table">
+                  <DataTable
+                    variantsPage={variantsPage}
+                    visibleColumns={visibleCols}
+                    visibleColumnsInfo={visibleColsInfo}
+                  />
+                  <Pagination
+                    firstPage={firstPage}
+                    numberPage={numberPage}
+                    lastPage={lastPage}
+                    totalPages={totalPages}
+                    onPageChange={changePage}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </main>
         </div>
         {showModalFilter && renderModal()}
-        {/* {console.log(selectchrom)}
-        {console.log(selectReference)}
-        {console.log(selectAlteration)}
-        {console.log(selectFieldInfoKey)}
-        {console.log(selectInfoFieldValue)} */}
       </div>
       <Footer />
     </>

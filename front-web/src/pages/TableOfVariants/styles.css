@@ -32,13 +32,18 @@
   font-size: 11pt;
 }
 
-.select-filter{
+.select-filter {
   font-size: 10pt;
   margin-right: 5px;
   width: 100%;
 }
 .option-filter {
   font-size: 10pt;
+}
+
+.label-igualdade {
+  font-size: 12pt;
+  margin-right: 4px;
 }
 
 .container-main {
@@ -69,7 +74,6 @@
   margin-left: 10px;
 }
 
-
 .butao {
   font-size: 14px;
   margin-bottom: 0;
@@ -81,7 +85,7 @@ td {
   border: 0;
 } */
 
-.text-filter{
+.text-filter {
   font-size: 11pt;
 }
 
@@ -98,15 +102,33 @@ td {
   width: 100%;
 } */
 
-.button-limpar-filtrar{
+.button-limpar-filtrar {
   margin-right: 5px;
   font-size: 10pt;
 }
 
-.button-filtrar{
+.button-filtrar {
   font-size: 10pt;
   padding: auto;
+}
 
+.visible-columns {
+  width: 100%;
+  height: 230px;
+  margin: 0;
+  padding: 0;
+}
+
+.list-infofields {
+  list-style: none;
+  list-style-type: none;
+}
+.columns-scrollable {
+  width: 100%;
+  height: 190px !important;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
 }
 
 @media (max-width: 760px) {

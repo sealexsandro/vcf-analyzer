@@ -15,26 +15,13 @@ public class VariantDto {
 	private Double quality;
 	private String filter;
 	private Map<String, String> infoCol;
-//	private String format;
+	private String format;
 //	private Map<String, String> samples;
 
-	private String sample;
+	private String samples;
 
 	public VariantDto() {
 	}
-
-//	public VariantDto(String chrom, Integer position, String idVariant, String reference, String alteration,
-//			Double quality, String filter, String sample) {
-//		super();
-//		this.chrom = chrom;
-//		this.position = position;
-//		this.idVariant = idVariant;
-//		this.reference = reference;
-//		this.alteration = alteration;
-//		this.quality = quality;
-//		this.filter = filter;
-//		this.sample = sample;
-//	}
 
 	public VariantDto(Variant variant) {
 		this.chrom = variant.getChrom();
@@ -44,9 +31,9 @@ public class VariantDto {
 		this.alteration = variant.getAlteration();
 		this.quality = variant.getQuality();
 		this.filter = variant.getFilter();
-		this.sample = organizeSample(variant.getSamples());
+		this.samples = organizeSample(variant.getSamples());
 		this.infoCol = organizeColunaInfo(variant.getInfoCol());
-//		this.format = variant.getFormat();
+		this.format = variant.getFormat();
 //		this.samples = variant.getSamples();
 	}
 
@@ -130,17 +117,17 @@ public class VariantDto {
 		return filter;
 	}
 
-	public String getSample() {
-		return sample;
+	public String getSamples() {
+		return samples;
 	}
 
 	public Map<String, String> getInfoCol() {
 		return infoCol;
 	}
 //
-//	public String getFormat() {
-//		return format;
-//	}
+	public String getFormat() {
+		return format;
+	}
 //
 //	public Map<String, String> getSamples() {
 //		return samples;
