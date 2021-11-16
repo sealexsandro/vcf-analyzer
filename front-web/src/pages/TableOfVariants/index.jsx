@@ -99,9 +99,6 @@ export const TableOfVariants = () => {
   }, []);
 
   useEffect(() => {
-    // let requisicao = `http://localhost:8080/getfilesbyfilds?page=${activePage}&sort=id&size=10&chrom=${selectchrom}&position=${-1}&reference=${selectReference}&alteration=${selectAlteration}&info_field=${infoFieldKeyAndValue}&id=${1}`;
-    // let requisicao = `http://localhost:8080/getfilesbyfilds?page=${activePage}&sort=id&size=10`;
-
     let filters = "";
     tableFilters.forEach(function (value, key) {
       if (key !== HeaderFields.INFO && value !== "" && value !== initValueOption) {
@@ -118,17 +115,11 @@ export const TableOfVariants = () => {
           filters += key + "=" + infoKeyValue[0] + "-" + infoKeyValue[1];
         }
       }
-      console.log("Filters: ", filters);
     });
-    // let requisicao = `http://localhost:8080/variantsbyfilds?${filters}&idvcf=${1}`;
     let requisicao = `http://localhost:8080/pagevariantsbyfields?page=${activePage}&sort=idvcf&size=10&${filters}&idvcf=${1}`;
-
-    // let requisicao = `http://localhost:8080/pagevariantsbyfields?${filters}&idvcf=${1}`;
-
     axios
       .get(
         requisicao
-        // `http://localhost:8080/filesgetbyid?id=${1}&page=${activePage}&sort=id&size=10`
       )
       .then((response) => {
         const results = response.data;
@@ -157,8 +148,6 @@ export const TableOfVariants = () => {
           };
         });
         setVariantsPage(variantData);
-        //  console.log(variantData);
-        // console.log("Pegando mais dados do banco");
       });
   }, [activePage, tableFilters]);
 
@@ -176,10 +165,6 @@ export const TableOfVariants = () => {
 
         results.forEach((tag, index) => {
           colsInfo.set(tag.idTag, false);
-          // markColsInfo.set(tag.idTag, {
-          //   name: tag.idTag,
-          //   display: false,
-          // });
         });
         setVisibleColsInfo(colsInfo);
         // allColumns.set(HeaderFields.INFO, markColsInfo);
@@ -305,10 +290,6 @@ export const TableOfVariants = () => {
     );
   };
 
-  const configureKeyAnValueOfInfoField = (infoKey) => {
-    setSelectFieldInfoKey(infoKey);
-  };
-
   const configureValueOfInfoField = (infoValue) => {
     if (infoValue !== "") {
       setSelectInfoFieldValue(infoValue);
@@ -361,8 +342,8 @@ export const TableOfVariants = () => {
                     fullheaders={allVisibleColumns}
                     headers={visibleCols}
                     headersInfo={visibleColsInfo}
-                    data={variantsPage}
                     fileName={"Meu arquivo"}
+                    tableFilters = {tableFilters}
                   />
                 ) : (
                   <button className="btn btn-md btn-primary shadow-none butao">

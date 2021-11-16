@@ -4,6 +4,8 @@ import Barchart from "../../components/Charts/BarChart";
 import { DataSummaryOfChart } from "../DataSummaryOfChart";
 
 export const VariantTypesChart = () => {
+  const [snps, setSnps] = useState(0);
+  const [indels, setIndels] = useState(0);
   const [chartData, setChartData] = useState({
     labels: {
       categories: [],
@@ -18,7 +20,7 @@ export const VariantTypesChart = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/variant-types?id=${2}`)
+      .get(`http://localhost:8080/variant-types?id=${1}`)
       .then((response) => {
         const result = response.data;
 
@@ -38,9 +40,10 @@ export const VariantTypesChart = () => {
         console.log(snp);
         console.log(indel);
         const mySeries = [snp, indel];
-        const myLabels = ["SNP", "INDEL"];
+        const myLabels = ["SNPs", "INDELs"];
         //     const myLabels = data.map((x) => x.quality.toString());
-
+        setSnps(snp);
+        setIndels(indels);
         setChartData({
           labels: {
             categories: myLabels,
@@ -60,11 +63,46 @@ export const VariantTypesChart = () => {
         <Barchart
           labels={chartData.labels}
           series={chartData.series}
-          sizeDataLabel="14px"
-          sizeLabelFont="15px"
+          titleLateral="Number of Variants"
+          titleDown="Variants Types"
+          sizeDataLabel="13px"
+          sizeLabelFont="14px"
         />
       </div>
-      <DataSummaryOfChart />
+      {/* <DataSummaryOfChart /> */}
+      <div className="border h-100 box-statistics-data movable-bar">
+        <>
+          <div className="d-flex justify-content-center align-items-center py-1 ">
+            <span className="fs-6 text-truncate py-0">
+              <b>Estatísticas</b>
+            </span>
+          </div>
+          <hr />
+          <ul className="nav nav-pills flex-sm-column flex-row flex-nowrap  justify-content-center">
+            <div className="">
+              <li className="">
+                <div>
+                  <span className="">
+                    <b>Número de SNPs:</b>{" "}
+                  </span>
+                  <span className="">{snps}</span>
+                </div>
+              </li>
+              <br />
+              <li className="">
+                <div>
+                  <span className="">
+                    <b>Número de Indels:</b>{" "}
+                  </span>
+                  <span className="">{indels}</span>
+                </div>
+              </li>
+              <br />
+            </div>
+          </ul>
+        </>
+  
+      </div>
     </div>
   );
 };

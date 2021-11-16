@@ -1,12 +1,13 @@
 .box-statistics {
-  align-items: start;
+  /* align-items: start; */
   justify-content: space-between;
   margin: 0;
   height: 100%;
 }
 .box-chart {
-  width: 73%;
+  width: 70%;
   margin-right: 2px;
+  border: 1px dashed yellow;
 }
 .movable-bar {
   border-left: 1px solid hsla(200, 10%, 50%, 100);
@@ -17,7 +18,7 @@
 
 @media (max-width: 800px) {
   .box-statistics {
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     height: auto;
   }

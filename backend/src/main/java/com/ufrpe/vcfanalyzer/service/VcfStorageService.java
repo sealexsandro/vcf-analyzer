@@ -95,7 +95,7 @@ public class VcfStorageService {
 		return this.variantRepository.summaryByQuality();
 	}
 
-	public Map<String, Integer> getVariantsTypes(Integer idvcf) {
+	public Map<String, Integer> findVariantsTypes(Integer idvcf) {
 		List<Variant> variantsResult = variantRepository.findAllVariantsByVcfId(idvcf);
 		Map<String, Integer> variantsTypes = vcfAnalisis.variantsTypesSummary(variantsResult);
 		return variantsTypes;
@@ -143,14 +143,14 @@ public class VcfStorageService {
 	}
 
 	@Transactional
-	public Page<VariantDto> findPageVariantsByFilds(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {
+	public Page<VariantDto> findPageVariantsByFields(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {
 		Page<Variant> result = variantRepository.findPageVariantsByFilds(filtersMap, idvcf, pageable);
 		return result.map(obj -> new VariantDto(obj));
 	}
 
 	@Transactional
 	public List<VariantDto> findAllVariantsByFields(Map<String, String> filters, Integer idvcf) {
-		List<Variant> variantsResult = variantRepository.findAllVariantsByFilds(filters, idvcf);
+		List<Variant> variantsResult = variantRepository.findAllVariantsByFields(filters, idvcf);
 		List<VariantDto> variantsDto = variantsResult.stream().map(variant -> new VariantDto(variant))
 				.collect(Collectors.toList());
 		return variantsDto;

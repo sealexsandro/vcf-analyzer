@@ -72,8 +72,8 @@ public class FileController {
 	}
 
 	@GetMapping(value = "/variant-types", params = "id")
-	public ResponseEntity<Map<String, Integer>> getVariantTypes(@RequestParam Integer id) {
-		Map<String, Integer> variantsTypes = vcfService.getVariantsTypes(id);
+	public ResponseEntity<Map<String, Integer>> findVariantTypes(@RequestParam Integer id) {
+		Map<String, Integer> variantsTypes = vcfService.findVariantsTypes(id);
 		return ResponseEntity.ok(variantsTypes);
 	}
 
@@ -103,13 +103,13 @@ public class FileController {
 	}
 
 	@GetMapping(value = "/pagevariantsbyfields")
-	public ResponseEntity<Page<VariantDto>> findPageVariantsByFilds(@RequestParam Map<String, String> filtersMap, @RequestParam Integer idvcf, Pageable pageable) {
-		Page<VariantDto> variants = vcfService.findPageVariantsByFilds(filtersMap, idvcf, pageable);
+	public ResponseEntity<Page<VariantDto>> findPageVariantsByFields(@RequestParam Map<String, String> filtersMap, @RequestParam Integer idvcf, Pageable pageable) {
+		Page<VariantDto> variants = vcfService.findPageVariantsByFields(filtersMap, idvcf, pageable);
 		return ResponseEntity.ok(variants);
 	}
 
 	@GetMapping(value = "/allvariantsbyfields")
-	public ResponseEntity<List<VariantDto>> findAllVariantsByFilds(@RequestParam Map<String, String> filtersMap,
+	public ResponseEntity<List<VariantDto>> findAllVariantsByFields(@RequestParam Map<String, String> filtersMap,
 			@RequestParam Integer idvcf) {
 		List<VariantDto> variants = vcfService.findAllVariantsByFields(filtersMap, idvcf);
 		return ResponseEntity.ok(variants);

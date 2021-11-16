@@ -60,7 +60,7 @@ public class VariantRepositoryCustomImpl implements VariantRepositoryCustom {
 	}
 
 	@Override
-	public List<Variant> findAllVariantsByFilds(Map<String, String> filtersMap, Integer idvcf) {
+	public List<Variant> findAllVariantsByFields(Map<String, String> filtersMap, Integer idvcf) {
 
 		StringBuilder consulta = new StringBuilder("select * from variant v where v.filevcf_id = " + idvcf);
 
@@ -80,12 +80,10 @@ public class VariantRepositoryCustomImpl implements VariantRepositoryCustom {
 				String filter = colocaAspasSimples(entry.getValue());
 				consulta.append(" and v.alteration =").append(filter);
 			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("info")) {
-				String infoKeyAndValue[] = entry.getValue().split(":");
-
+				String infoKeyAndValue[] = entry.getValue().split("-");
 				String info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
-				System.out.println("INFO: "+info);
-
 				consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");
+
 			}
 
 		}

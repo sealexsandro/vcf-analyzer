@@ -18,7 +18,7 @@ export default function Barchart({
     //   height: 500,
     //   type: "bar",
     // },
-    plotOptions: {
+      plotOptions: {
       bar: {
         // horizontal: true,
         // vertical: true,
@@ -34,7 +34,7 @@ export default function Barchart({
       formatter: function (val) {
         return val + "";
       },
-      offsetY: 2,
+      offsetY: 10,
       style: {
         fontSize: sizeDataLabel ? sizeDataLabel : "12px",
         colors: ["#304758"],
@@ -63,10 +63,12 @@ export default function Barchart({
     title: {
       text: titleDown,
       floating: false,
-      offsetY: 363,
-      align: "center",
+      // offsetY: 390,
+      offsetY: 2,
+      align: "left",
       style: {
         color: "#444",
+        fontSize: "15px",
       },
     },
   };
@@ -83,7 +85,7 @@ export default function Barchart({
                   colors: [],
                   fontSize: sizeLabelFont ? sizeLabelFont : "12px",
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontWeight: 380,
+                  fontWeight: 370,
                   cssClass: "apexcharts-xaxis-label",
                 },
                 offsetX: 0,
@@ -96,7 +98,7 @@ export default function Barchart({
                 // },
                 offsetY: 0,
                 style: {
-                  fontSize: "12px",
+                  fontSize: "14px",
                   fontFamily: 0,
                 },
                 x: {
@@ -123,7 +125,7 @@ export default function Barchart({
           }}
           series={chartData.series}
           type="bar"
-          height="380"
+          height="420"
         />
   );
 }

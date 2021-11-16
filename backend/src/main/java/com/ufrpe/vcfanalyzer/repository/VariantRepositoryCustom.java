@@ -12,7 +12,7 @@ public interface VariantRepositoryCustom {
 
 	Page<Variant> findPageVariantsByFilds(Map<String, String> filtersMap, Integer idvcf, Pageable pageable);
 
-	List<Variant> findAllVariantsByFilds(Map<String, String> filtersMap, Integer idvcf);
+	List<Variant> findAllVariantsByFields(Map<String, String> filtersMap, Integer idvcf);
 
 //	Page<Variant> getVariantsByFilds(String queryCustom, Pageable pageable);
 }
