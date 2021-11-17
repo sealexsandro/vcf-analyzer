@@ -1,5 +1,6 @@
 package com.ufrpe.vcfanalyzer.repository;
 
+import java.sql.Clob;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -48,7 +49,10 @@ public interface VariantRepository extends JpaRepository<Variant, Integer>, Vari
 	List<String> getFilterNotDuplicatesByIdVcf(@Param(value = "id") Integer id);
 	
 	
+//	@Query(value = "SELECT v.info_col FROM variant v where v.filevcf_id = :id", nativeQuery = true)
+//	List<String> getInfoColById(@Param(value = "id") Integer id);
+	
 	@Query(value = "SELECT v.info_col FROM variant v where v.filevcf_id = :id", nativeQuery = true)
-	List<String> getInfoColById(@Param(value = "id") Integer id);
+	List<Clob> getInfoColById(@Param(value = "id") Integer id);
 	
 }

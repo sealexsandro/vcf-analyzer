@@ -3,6 +3,10 @@ package com.ufrpe.vcfanalyzer.service;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.sql.Clob;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,13 +138,41 @@ public class VcfStorageService {
 		return atributesMap;
 	}
 
-	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) {
+	// Metodo funcional com o banco Postgres
+//	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) {
+//
+//		List<String> infoCol = this.variantRepository.getInfoColById(idVcf);
+//		System.out.println(infoCol);
+//		Map<String, Set<String>> keyAndValuesOfInfoCol = this.vcfAnalisis.getValuesNoDuplicateInfoCol(infoCol);
+//
+//		return keyAndValuesOfInfoCol;
+//	}
+	
+	// copia do metodo acima para funcionar com o banco H2
+	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) throws SQLException, IOException {
 
-		List<String> infoCol = this.variantRepository.getInfoColById(idVcf);
+		List<Clob> infoColClob = this.variantRepository.getInfoColById(idVcf);
+		List<String> infoCol = new ArrayList<String>();
+		
+		Reader r;
+		for(int i=0; i< infoColClob.size(); i++) {
+			r = infoColClob.get(i).getCharacterStream();
+			StringBuffer buffer = new StringBuffer();
+			int ch;
+			while ((ch = r.read())!=-1) {
+				buffer.append(""+(char)ch);
+				
+			}
+			if(buffer.length() > 0) {
+				infoCol.add(buffer.toString());
+			}
+		}
+		
 		Map<String, Set<String>> keyAndValuesOfInfoCol = this.vcfAnalisis.getValuesNoDuplicateInfoCol(infoCol);
 
 		return keyAndValuesOfInfoCol;
 	}
+	
 
 	@Transactional
 	public Page<VariantDto> findPageVariantsByFields(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {

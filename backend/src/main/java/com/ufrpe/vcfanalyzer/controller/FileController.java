@@ -1,6 +1,7 @@
 package com.ufrpe.vcfanalyzer.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -97,7 +98,7 @@ public class FileController {
 	}
 
 	@GetMapping(value = "/info-attributes", params = "id")
-	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id) {
+	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id) throws SQLException, IOException {
 		Map<String, Set<String>> atributesInfoColMap = this.vcfService.getValuesInfoNotDuplicatesById(id);
 		return ResponseEntity.ok(atributesInfoColMap);
 	}

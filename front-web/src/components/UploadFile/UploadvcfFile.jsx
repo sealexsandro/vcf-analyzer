@@ -48,7 +48,7 @@ export const UploadFile = () => {
   };
 
   const redirectPage = () => {
-    return <Redirect path to="/dashboard" />;
+    return <Redirect path to="/table-variants" />;
   };
   return (
     <div className="d-flex flex-column justify-content-center">

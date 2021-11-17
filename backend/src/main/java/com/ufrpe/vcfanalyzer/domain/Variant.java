@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Variant implements Serializable{
@@ -29,7 +30,8 @@ public class Variant implements Serializable{
 	// Desisti dessa forma, pois o mapeamento pelo hibernate fica complicado
 //	private Map<String, String> infoCol; 
 	
-	@Column(columnDefinition="text")
+//	@Column(columnDefinition="text")
+	@Lob
 	private String infoCol;
 		
 	@Column(columnDefinition="text")
