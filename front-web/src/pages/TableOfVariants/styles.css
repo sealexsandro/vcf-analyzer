@@ -1,6 +1,18 @@
-.variant-table {
+.container-color{
+  background-color: #F2F2F2;
+}
+
+.container-menu {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.table-and-filters{
+  /* padding: 0; */
+}
+.container-table {
   padding-left: 0;
   margin-left: 0;
+  overflow-x: auto;
 }
 .menu-list {
   margin-bottom: 3px;
@@ -48,13 +60,10 @@
 
 .container-main {
   /* padding-right: 0; */
-  /* padding-top: 5px !important; */
+  padding-top: 3px !important;
   margin-bottom: 0 !important;
 }
-.container-menu {
-  padding-left: 15px;
-  padding-right: 35px;
-}
+
 .titulo-menu {
   margin-bottom: 0;
   font-size: 12pt;
@@ -132,9 +141,11 @@ td {
 }
 
 @media (max-width: 760px) {
-  .variants-table {
+  .container-table{
     width: 100%;
-    margin: auto;
+    margin-top: 15px;
+    /* margin-bottom: 30px; */
+    overflow-x: inherit;
   }
   .container-filter {
     width: 100%;

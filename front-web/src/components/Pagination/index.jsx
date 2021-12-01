@@ -3,7 +3,7 @@ import '../Pagination/styles.css';
 const Pagination = (props) => {
   const { firstPage, numberPage, lastPage, totalPages, onPageChange } = props;
   return (
-    <div className="d-flex flex-row-reverse">
+    <div className="d-flex flex-row-reverse container-page">
       <nav>
         <ul className="pagination">
           <li className={`page-item ${firstPage ? "disabled" : ""}`}>

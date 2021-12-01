@@ -1,3 +1,13 @@
+.nav-color{
+  /* background-color: #2169A7; */
+  /* background-color: #3b5eac; */
+  background-color: #4673d3;
+}
+
+.titulo-logo{
+  font-weight: bold;
+}
+
 .nav-container {
   padding-left: 2.5rem !important;
   padding-bottom: 10px !important;

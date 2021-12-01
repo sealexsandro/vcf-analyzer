@@ -39,8 +39,17 @@ public class VariantRepositoryCustomImpl implements VariantRepositoryCustom {
 				consulta.append(" and v.alteration =").append(filter);
 			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("info")) {
 				String infoKeyAndValue[] = entry.getValue().split("-");
-				String info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
-				consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");
+				
+				String info = "";
+				try {
+					info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
+				}catch (ArrayIndexOutOfBoundsException e) {
+					info = "";
+				}
+				if(!info.equalsIgnoreCase("")) {
+					consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");					
+				}	
+				
 			}
 
 		}
@@ -81,8 +90,17 @@ public class VariantRepositoryCustomImpl implements VariantRepositoryCustom {
 				consulta.append(" and v.alteration =").append(filter);
 			} else if (entry.getKey().toLowerCase().equalsIgnoreCase("info")) {
 				String infoKeyAndValue[] = entry.getValue().split("-");
-				String info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
-				consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");
+							
+				String info = "";
+				try {
+					info = infoKeyAndValue[0] + "=" + infoKeyAndValue[1];
+				}catch (ArrayIndexOutOfBoundsException e) {
+					info = "";
+				}
+				if(!info.equalsIgnoreCase("")) {
+					consulta.append(" and v.info_col ilike '%").append(info+";").append("%'");				
+				}	
+				
 
 			}
 

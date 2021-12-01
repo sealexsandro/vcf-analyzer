@@ -25,7 +25,8 @@ public class VcfAnalisis {
 
 	private FileVcfData vcfFileData;
 //	private int numeroDeColunas = 0;
-	private List<String> columnSamples = new ArrayList<String>();
+	private List<String> headerOfSamples;
+	private List<String> headers;
 
 	public VcfAnalisis() {
 
@@ -34,6 +35,8 @@ public class VcfAnalisis {
 	public List<String> readFile(InputStream stream) throws IOException {
 
 		List<String> fileVcf = null; // todo o arquivo será colocado nesta lista
+		headers = new ArrayList<String>();
+		headerOfSamples = new ArrayList<String>();
 
 		if (stream != null) {
 			// StringBuilder sb = new StringBuilder();
@@ -79,9 +82,24 @@ public class VcfAnalisis {
 							// POS, ID
 					String columnHeader[] = row.split("\t");
 					for (int i = 0; i < columnHeader.length; i++) {
-//						this.vcfFileData.addColumnHeader(columnHeader[i]);
-//						this.numeroDeColunas++;
-						this.columnSamples.add(columnHeader[i]);
+						caracter = columnHeader[i].charAt(0);
+						if (caracter == '#') {
+							String header = columnHeader[i].substring(1, columnHeader[i].length());
+							if (VariantToken.variantTokensMap.containsKey(header.toUpperCase())) {
+								this.headers.add(header);
+							}
+						} else {
+							if (VariantToken.variantTokensMap.containsKey(columnHeader[i].toUpperCase())) {
+								this.headers.add(columnHeader[i]);
+//								System.out.println("Headers: "+columnHeader[i]);
+							} else {
+								this.headerOfSamples.add(columnHeader[i]);
+//								System.out.println(columnHeader[i]);
+//								System.out.println("HeadersSapmles: "+columnHeader[i]);
+
+							}
+						}
+
 					}
 					isfinalLine = true;
 					indice++;
@@ -146,49 +164,91 @@ public class VcfAnalisis {
 		String infoCol = "";
 		String samples = "";
 
-		for (int coluna = 0; coluna < 10; coluna++) {
-			if (coluna == 0) {
-				chrom = rowData[coluna];
-			} else if (coluna == 1) {
-				position = Integer.parseInt(rowData[coluna]);
-			} else if (coluna == 2) {
-				id = rowData[coluna];
-			} else if (coluna == 3) {
-				reference = rowData[coluna];
-			} else if (coluna == 4) {
-				alteration = rowData[coluna];
-			} else if (coluna == 5) {
-				quality = Double.parseDouble(rowData[coluna]);
-			} else if (coluna == 6) {
-				filter = rowData[coluna];
-			} else if (coluna == 7) {
-				infoCol = rowData[coluna];
-//				String metaInformacoes[] = rowData[coluna].split(";");
-//				for (int j = 0; j < metaInformacoes.length; j++) {
-////					String metaDado[] = metaInformacoes[j].split("=");
-////					infoCol.put(metaDado[0], metaDado[1]);
-//					infoCol.add(metaInformacoes[j]);
-//				}
-			} else if (coluna == 8) {
-				format = rowData[coluna];
-			} else {
-				for (int colunaSamples = coluna; colunaSamples < rowData.length; colunaSamples++) {
-					if (!rowData[colunaSamples].equals(".")) {
-						// samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
-						String samp = this.columnSamples.get(colunaSamples) + "===" + rowData[colunaSamples];
-						samples = samples.concat(samp);
-
-						if (colunaSamples < rowData.length) {
-							samples = samples.concat("&&");
-						}
-
-//						System.out.println(samples);
-					}
-
+		int indexHeader = 0;
+//		System.out.println("Headers: "+headers.toString());
+		for (String header : headers) {
+//			System.out.println("Cabecalho: "+header+"  Valor: "+rowData[indexHeader]);
+			if (header.equalsIgnoreCase("CHROM")) {
+				chrom = rowData[indexHeader];
+//				System.out.println(chrom);
+			} else if (header.equalsIgnoreCase("POS")) {
+				position = Integer.parseInt(rowData[indexHeader]);
+			} else if (header.equalsIgnoreCase("ID")) {
+				id = rowData[indexHeader];
+			} else if (header.equalsIgnoreCase("REF")) {
+				reference = rowData[indexHeader];
+			} else if (header.equalsIgnoreCase("ALT")) {
+				alteration = rowData[indexHeader];
+			} else if (header.equalsIgnoreCase("QUAL")) {
+				try {
+					quality = Double.parseDouble(rowData[indexHeader]);
+				}catch (NumberFormatException e) {
+					quality = 0D;
 				}
-
+				
+			} else if (header.equalsIgnoreCase("FILTER")) {
+				filter = rowData[indexHeader];
+			} else if (header.equalsIgnoreCase("INFO")) {
+				infoCol = rowData[indexHeader];
+			} else if (header.equalsIgnoreCase("FORMAT")) {
+				format = rowData[indexHeader];
+			} else {
+				break;
 			}
+			indexHeader++;
 		}
+
+		for (String headerSample : headerOfSamples) {
+			if (!rowData[indexHeader].equals(".")) {
+				// samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
+				String samp = headerSample + "===" + rowData[indexHeader];
+				if(!samples.equalsIgnoreCase("")) {
+					samples = samples.concat("&&").concat(samp);
+				}else {
+					samples = samples.concat(samp);				
+				}
+//				System.out.println(samples);
+			}
+			indexHeader++;
+		}
+
+//		for (int coluna = 0; coluna < 10; coluna++) {
+//			if (coluna == 0) {
+//				chrom = rowData[coluna];
+//			} else if (coluna == 1) {
+//				position = Integer.parseInt(rowData[coluna]);
+//			} else if (coluna == 2) {
+//				id = rowData[coluna];
+//			} else if (coluna == 3) {
+//				reference = rowData[coluna];
+//			} else if (coluna == 4) {
+//				alteration = rowData[coluna];
+//			} else if (coluna == 5) {
+//				quality = Double.parseDouble(rowData[coluna]);
+//			} else if (coluna == 6) {
+//				filter = rowData[coluna];
+//			} else if (coluna == 7) {
+//				infoCol = rowData[coluna];
+//			} else if (coluna == 8) {
+//				format = rowData[coluna];
+//			} else {
+//				for (int colunaSamples = 0; colunaSamples < rowData.length; colunaSamples++) {
+//					if (!rowData[colunaSamples].equals(".")) {
+//						// samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
+//						String samp = this.headerOfSamples.get(colunaSamples) + "===" + rowData[colunaSamples];
+//						samples = samples.concat(samp);
+//
+//						if (colunaSamples < rowData.length) {
+//							samples = samples.concat("&&");
+//						}
+//
+////						System.out.println(samples);
+//					}
+//
+//				}
+//
+//			}
+//		}
 		variant = new Variant(chrom, position, id, reference, alteration, quality, filter, infoCol, format, samples);
 		return variant;
 	}
@@ -210,11 +270,26 @@ public class VcfAnalisis {
 				keyAndValue = vectorInfo[i].split("=");
 
 				if (keyAndValuesMap.containsKey(keyAndValue[0])) {
-					keyAndValuesMap.get(keyAndValue[0]).add(keyAndValue[1]);
+					
+					String value = "";
+					try {
+						value = keyAndValue[1];
+					} catch (ArrayIndexOutOfBoundsException err) {
+						value = "";
+					}
+					keyAndValuesMap.get(keyAndValue[0]).add(value);
+//					System.out.println("INFO: "+vectorInfo[0]+" - Valor: "+value);
 				} else {
 					Set<String> values = new HashSet<>();
-					values.add(keyAndValue[1]);
+					String value = "";
+					try {
+						value = keyAndValue[1];
+					} catch (ArrayIndexOutOfBoundsException err) {
+						value = "";
+					}
+					values.add(value);
 					keyAndValuesMap.put(keyAndValue[0], values);
+//					System.out.println("INFO: "+vectorInfo[0]+" - Valor: "+value);
 				}
 			}
 
@@ -290,6 +365,7 @@ public class VcfAnalisis {
 			if (keyAndValueColInfo[0].equalsIgnoreCase(singleFieldInfo)) {
 				try {
 					float value = Float.parseFloat(keyAndValueColInfo[1]);
+					System.out.println("Valor de DP: "+value);
 					return value;
 				} catch (Exception err) {
 					System.out.println("Deu Erro na conversão de string para float, linha 259 da classe VCFAnalisis");

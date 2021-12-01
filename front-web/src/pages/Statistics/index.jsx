@@ -1,4 +1,4 @@
-import axios from "axios";
+import http from "../../http-common";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
@@ -6,6 +6,7 @@ import "./styles.css";
 import { StatisticsMenu } from "../../charts/StatisticsMenu";
 import { chartComponents } from "../../utils/chartComponents";
 import { NavBarWithMenu } from "../../components/NavbarWithMenu";
+import vcfFileSession from "../../services/vcfFileSession";
 
 export const StatisticsCharts = () => {
   const [dataTagsInfo, setDataTagsInfo] = useState([]);
@@ -31,7 +32,8 @@ export const StatisticsCharts = () => {
   // };
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/tagsInfobyidvcf?id=${1}`).then((response) => {
+    http
+    .get(`/tagsInfobyidvcf?id=${vcfFileSession.getIdVcf()}`).then((response) => {
       const results = response.data;
 
       const tagsInfo = [];
@@ -132,22 +134,6 @@ export const StatisticsCharts = () => {
             {/* {dashPageComponent(dashComponent)} */}
             <StatisticsMenu chartComponent={dashComponent} tagInfo={selectedTagInfo}/>
 
-            {/* <div className="box-statistics  p-3 d-flex flex-wrap align-content-start">
-              <div className="box-chart movable-bar">
-                <div className="charts">{dashPageComponent(dashComponent)}</div>
-              </div>
-              <div className="border h-100 box-statistics-data">
-                <div className="d-flex justify-content-center align-items-center pb-2 ">
-                  <span className="fs-6 text-truncate">Dados Estatísticos</span>
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
-                  animi, perspiciatis adipisci rerum veniam excepturi quisquam
-                  magni error rem impedit odio repudiandae, temporibus tenetur
-                  accusantium ducimus qui officia aliquam aperiam.
-                </p>
-              </div>
-            </div> */}
           </main>
         </div>
       </div>

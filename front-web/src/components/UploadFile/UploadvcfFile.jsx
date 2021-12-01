@@ -2,7 +2,8 @@ import { useState } from "react";
 import UploadFileService from "../../services/upload-vcf";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
-import VcfAnalized from "../../services/vcf-analized";
+import VcfAnalized from "../../services/vcfFileSession";
+import vcfFileSession from "../../services/vcfFileSession";
 
 export const UploadFile = () => {
   const [selectedFiles, setSelectedFiles] = useState("");
@@ -30,8 +31,9 @@ export const UploadFile = () => {
       setProgress(Math.round((100 * event.loaded) / event.total));
     })
       .then((response) => {
-        setMessage(response.data.message);
-        VcfAnalized.setIdVcf(1);
+        // setMessage(response.data.message);
+        vcfFileSession.setIdVcf(response.data);
+        console.log(vcfFileSession.getIdVcf())
         // setTimeout(() => {
         //   setRedirect(true);
         // }, 1000);

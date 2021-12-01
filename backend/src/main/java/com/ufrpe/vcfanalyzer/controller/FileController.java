@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
-import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
@@ -33,19 +32,20 @@ public class FileController {
 	private VcfStorageService vcfService;
 
 	@PostMapping("/upload")
-	public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile multipart)
+	public ResponseEntity<Integer> uploadFile(@RequestParam("file") MultipartFile multipart)
 			throws IllegalStateException, IOException {
 
-		vcfService.saveFile(multipart);
+		Integer fileDataId = vcfService.saveFile(multipart);
 
-		return ResponseEntity.noContent().build();
+//		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(fileDataId);
 	}
 
-	@GetMapping(value = "/files")
-	public ResponseEntity<Page<VariantDto>> findAllVariants(Pageable pageable) {
-		Page<VariantDto> list = vcfService.findAll(pageable);
-		return ResponseEntity.ok(list);
-	}
+//	@GetMapping(value = "/files")
+//	public ResponseEntity<Page<VariantDto>> findAllVariants(Pageable pageable) {
+//		Page<VariantDto> list = vcfService.findAll(pageable);
+//		return ResponseEntity.ok(list);
+//	}
 
 	@GetMapping(value = "/allvariants", params = "idvcf")
 	public ResponseEntity<List<VariantDto>> findAllVariantsByVcfId(@RequestParam Integer idvcf) {
@@ -65,9 +65,9 @@ public class FileController {
 		return ResponseEntity.ok(list);
 	}
 
-	@GetMapping(value = "/quality-summary")
-	public ResponseEntity<List<QualityVariantDTO>> variantQualitySummary() {
-		List<QualityVariantDTO> list = vcfService.variantQualitySummary();
+	@GetMapping(value = "/summaryquality", params = "idvcf")
+	public ResponseEntity<List<QualityVariantDTO>> summaryOfVariantQuality(@RequestParam Integer idvcf) {
+		List<QualityVariantDTO> list = vcfService.summaryOfVariantQuality(idvcf);
 //		System.out.println(list);
 		return ResponseEntity.ok(list);
 	}
@@ -98,13 +98,15 @@ public class FileController {
 	}
 
 	@GetMapping(value = "/info-attributes", params = "id")
-	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id) throws SQLException, IOException {
+	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id)
+			throws SQLException, IOException {
 		Map<String, Set<String>> atributesInfoColMap = this.vcfService.getValuesInfoNotDuplicatesById(id);
 		return ResponseEntity.ok(atributesInfoColMap);
 	}
 
 	@GetMapping(value = "/pagevariantsbyfields")
-	public ResponseEntity<Page<VariantDto>> findPageVariantsByFields(@RequestParam Map<String, String> filtersMap, @RequestParam Integer idvcf, Pageable pageable) {
+	public ResponseEntity<Page<VariantDto>> findPageVariantsByFields(@RequestParam Map<String, String> filtersMap,
+			@RequestParam Integer idvcf, Pageable pageable) {
 		Page<VariantDto> variants = vcfService.findPageVariantsByFields(filtersMap, idvcf, pageable);
 		return ResponseEntity.ok(variants);
 	}

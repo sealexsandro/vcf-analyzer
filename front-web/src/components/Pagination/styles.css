@@ -7,6 +7,10 @@
   -webkit-tap-highlight-color: transparent; /* For some Androids */
 }
 
+.container-page{
+  /* margin-top: 10px; */
+}
+
 .item{
   background-color: white;
 }

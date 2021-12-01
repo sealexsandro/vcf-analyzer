@@ -4,7 +4,6 @@ import { VariantTypesChart } from "../VariantTypesChart";
 import { BoxplotInfoTag } from "../BoxplotInfoTags";
 
 export const StatisticsMenu = ({ chartComponent, tagInfo }) => {
-  //   const { tagField } = tagInfo;
 
   const dashPageComponent = () => {
     switch (chartComponent) {

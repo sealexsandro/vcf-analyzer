@@ -11,16 +11,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ufrpe.vcfanalyzer.domain.Variant;
-import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 
 @Repository
 public interface VariantRepository extends JpaRepository<Variant, Integer>, VariantRepositoryCustom{
 
-	@Query("SELECT new com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO(obj.quality, CAST (COUNT(obj.quality) AS integer))"
-			+ " FROM Variant AS obj GROUP BY obj.quality")
-	List<QualityVariantDTO> summaryByQuality();
+//	@Query("SELECT new com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO(obj.quality, CAST (COUNT(obj.quality) AS integer))"
+//			+ " FROM Variant AS obj GROUP BY obj.quality")
+//	List<QualityVariantDTO> summaryByQuality();
+	
+	@Query(value= "select v.quality from variant as v where v.filevcf_id = :id", nativeQuery = true)
+	List<Double> summaryOfVariantQuality(@Param(value = "id") Integer id);
 
-	@Query(value = "SELECT * FROM variant v where v.filevcf_id = :id", nativeQuery = true)
+
+	@Query(value = "SELECT * FROM variant v group by v.quality where v.filevcf_id = :id ", nativeQuery = true)
 	Page<Variant> getVariantsById(@Param(value = "id") Integer id, Pageable pageable);
 
 //	@Query("SELECT new com.ufrpe.vcfanalyzer.dtos.VariantDto(obj.reference, obj.alteration, obj.infoCol)"

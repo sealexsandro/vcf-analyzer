@@ -7,7 +7,9 @@ import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,7 +86,7 @@ public class VcfStorageService {
 		// return result;
 	}
 
-	public void saveFile(MultipartFile multipart) throws IOException {
+	public Integer saveFile(MultipartFile multipart) throws IOException {
 
 		InputStream stream = new BufferedInputStream(multipart.getInputStream());
 
@@ -92,11 +94,25 @@ public class VcfStorageService {
 		FileVcfData vcfData = this.vcfAnalisis.organizeVcf(fileVcf);
 		this.vcfRepository.save(vcfData);
 
-		System.out.println("**************Terminou****************");
-	}
+		Integer fileDataId = vcfData.getId();
 
-	public List<QualityVariantDTO> variantQualitySummary() {
-		return this.variantRepository.summaryByQuality();
+		System.out.println("**************Arquivo Salvo No Banco****************");
+		return fileDataId;
+	}
+//
+//	public List<QualityVariantDTO> variantQualitySummary() {
+//		return this.variantRepository.summaryByQuality();
+//	}
+
+	public List<QualityVariantDTO> summaryOfVariantQuality(Integer idvcf) {
+		List<Double> listQuality = this.variantRepository.summaryOfVariantQuality(idvcf);
+		Set<Double> setQuality = new HashSet<Double>(listQuality);
+
+		List<QualityVariantDTO> summaries = setQuality.stream()
+				.map(item -> new QualityVariantDTO(item, Collections.frequency(listQuality, item)))
+				.collect(Collectors.toList());
+
+		return summaries;
 	}
 
 	public Map<String, Integer> findVariantsTypes(Integer idvcf) {
@@ -147,32 +163,31 @@ public class VcfStorageService {
 //
 //		return keyAndValuesOfInfoCol;
 //	}
-	
+
 	// copia do metodo acima para funcionar com o banco H2
 	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) throws SQLException, IOException {
 
 		List<Clob> infoColClob = this.variantRepository.getInfoColById(idVcf);
 		List<String> infoCol = new ArrayList<String>();
-		
+
 		Reader r;
-		for(int i=0; i< infoColClob.size(); i++) {
+		for (int i = 0; i < infoColClob.size(); i++) {
 			r = infoColClob.get(i).getCharacterStream();
 			StringBuffer buffer = new StringBuffer();
 			int ch;
-			while ((ch = r.read())!=-1) {
-				buffer.append(""+(char)ch);
-				
+			while ((ch = r.read()) != -1) {
+				buffer.append("" + (char) ch);
+
 			}
-			if(buffer.length() > 0) {
+			if (buffer.length() > 0) {
 				infoCol.add(buffer.toString());
 			}
 		}
-		
+
 		Map<String, Set<String>> keyAndValuesOfInfoCol = this.vcfAnalisis.getValuesNoDuplicateInfoCol(infoCol);
 
 		return keyAndValuesOfInfoCol;
 	}
-	
 
 	@Transactional
 	public Page<VariantDto> findPageVariantsByFields(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {

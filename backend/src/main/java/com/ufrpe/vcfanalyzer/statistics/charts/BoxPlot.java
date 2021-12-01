@@ -50,27 +50,37 @@ public class BoxPlot {
 
 	public float calculaValorMinimo(List<Float> numList, float terceiroQuartil, float primeiroQuartil) {
 		float intervaloInterQuartil = terceiroQuartil - primeiroQuartil;
-		float tamanhoMinimoDoBigodeDaCaixa = intervaloInterQuartil * 1.5f;
 
-		float valorMinimoParaBigode = primeiroQuartil - tamanhoMinimoDoBigodeDaCaixa;
+		float limiteInferiorDoBigode = primeiroQuartil - (1.5f * intervaloInterQuartil);
 
-		if (numList.get(0) > valorMinimoParaBigode) {
+		if (numList.get(0) > limiteInferiorDoBigode) {
 			return numList.get(0);
 		}
-		return valorMinimoParaBigode;
+		return limiteInferiorDoBigode;
 	}
 
+//	public float calculaValorMaximo(List<Float> numList, float terceiroQuartil, float primeiroQuartil) {
+//		float intervaloInterQuartil = terceiroQuartil - primeiroQuartil;
+//		float tamanhoMaximoDoBigodeDaCaixa = intervaloInterQuartil * 1.5f;
+//
+//		float valorMaximoParaBigode = terceiroQuartil + tamanhoMaximoDoBigodeDaCaixa;
+//
+//		if (numList.get(numList.size() - 1) < valorMaximoParaBigode) {
+//			return numList.get(numList.size() - 1);
+//		}
+//		return valorMaximoParaBigode;
+//	}
+	
 	public float calculaValorMaximo(List<Float> numList, float terceiroQuartil, float primeiroQuartil) {
 		float intervaloInterQuartil = terceiroQuartil - primeiroQuartil;
-		float tamanhoMaximoDoBigodeDaCaixa = intervaloInterQuartil * 1.5f;
+		float limiteSuperiorDoBigode = terceiroQuartil + (1.5f * intervaloInterQuartil) ;
 
-		float valorMaximoParaBigode = terceiroQuartil + tamanhoMaximoDoBigodeDaCaixa;
-
-		if (numList.get(numList.size() - 1) < valorMaximoParaBigode) {
+		if (numList.get(numList.size() - 1) < limiteSuperiorDoBigode) {
 			return numList.get(numList.size() - 1);
 		}
-		return valorMaximoParaBigode;
+		return limiteSuperiorDoBigode;
 	}
+
 
 	public List<Float> encontraOutliersSuperiores(List<Float> numbers) {
 		List<Float> outliersSuperiores = new ArrayList<>();
@@ -79,8 +89,13 @@ public class BoxPlot {
 
 		for (int i = middlePosition + (middlePosition / 2); i < numbers.size(); i++) {
 			if (numbers.get(i) > this.valorMaximo) {
-				outliersSuperiores.add(numbers.get(i));
+				if(!outliersSuperiores.contains(numbers.get(i))) {
+					outliersSuperiores.add(numbers.get(i));
+					System.out.println("Outileirs: "+ numbers.get(i));
+				}
+				
 			}
+			
 		}
 
 		return outliersSuperiores;
@@ -94,6 +109,7 @@ public class BoxPlot {
 		for (int i = middlePosition - (middlePosition / 2); i >= 0; i--) {
 			if (numbers.get(i) < this.valorMinimo) {
 				outliersInferiores.add(numbers.get(i));
+				
 			}
 		}
 

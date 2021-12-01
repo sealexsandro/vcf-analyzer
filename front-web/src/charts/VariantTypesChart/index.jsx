@@ -1,7 +1,7 @@
-import axios from "axios";
+import http from "../../http-common";
 import { useEffect, useState } from "react";
 import Barchart from "../../components/Charts/BarChart";
-import { DataSummaryOfChart } from "../DataSummaryOfChart";
+import vcfFileSession from "../../services/vcfFileSession";
 
 export const VariantTypesChart = () => {
   const [snps, setSnps] = useState(0);
@@ -19,8 +19,8 @@ export const VariantTypesChart = () => {
   });
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/variant-types?id=${1}`)
+    http
+      .get(`/variant-types?id=${vcfFileSession.getIdVcf()}`)
       .then((response) => {
         const result = response.data;
 

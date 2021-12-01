@@ -1,15 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-// import { Tab, Tabs } from "react-bootstrap-tabs";
+import http from "../../http-common";
 import { DataTable } from "../../components/DataTable";
 import { ExportButton } from "../../components/ExportButton";
 import Footer from "../../components/Footer";
 import { NavBarWithMenu } from "../../components/NavbarWithMenu";
 import Pagination from "../../components/Pagination";
-import { findVisibleColumns, displayColumns } from "../../utils/displayColumns";
+import vcfFileSession from "../../services/vcfFileSession";
+import { findVisibleColumns } from "../../utils/displayColumns";
 import { HeaderFields, HeaderFieldsList } from "../../utils/tokens";
-// import { HeaderFields, HeaderFieldsList } from "../../utils/tokens";
+
 import {
   convertStringForNumber,
   isNumberList,
@@ -47,8 +47,8 @@ export const TableOfVariants = () => {
   const initValueOption = "-----";
 
   const loadAttribVariants = () => {
-    axios
-      .get(`http://localhost:8080/variants-by-unique-attributes?id=${1}`)
+    http
+      .get(`/variants-by-unique-attributes?id=${vcfFileSession.getIdVcf()}`)
       .then((response) => {
         const result = response.data;
         setFullFieldsValues({
@@ -63,8 +63,8 @@ export const TableOfVariants = () => {
 
   const loadFildsAndValuesColInfo = () => {
     // const keys = [];
-    axios
-      .get(`http://localhost:8080/info-attributes?id=${1}`)
+    http
+      .get(`/info-attributes?id=${vcfFileSession.getIdVcf()}`)
       .then((response) => {
         const result = response.data;
         const infoFields = [];
@@ -116,8 +116,8 @@ export const TableOfVariants = () => {
         }
       }
     });
-    let requisicao = `http://localhost:8080/pagevariantsbyfields?page=${activePage}&sort=idvcf&size=10&${filters}&idvcf=${1}`;
-    axios
+    let requisicao = `/pagevariantsbyfields?page=${activePage}&sort=idvcf&size=10&${filters}&idvcf=${vcfFileSession.getIdVcf()}`;
+    http
       .get(
         requisicao
       )
@@ -152,10 +152,11 @@ export const TableOfVariants = () => {
   }, [activePage, tableFilters]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/tagsInfobyidvcf?id=${1}`)
+    http
+      .get(`tagsInfobyidvcf?id=${vcfFileSession.getIdVcf()}`)
       .then((response) => {
         const results = response.data;
+        console.log("ID DO ARQU: ",vcfFileSession.getIdVcf())
 
         // let allColumns = displayColumns();
         let visibleCols = findVisibleColumns();
@@ -322,9 +323,10 @@ export const TableOfVariants = () => {
       <NavBarWithMenu />
 
       {/* DAQUI PARA BAIXO É O SUBMENU */}
-      <div className="container-fluid d-flex flex-row ">
-        <div className="col container-menu">
-          <nav className="d-flex navbar navbar-light bg-light">
+      <div className="d-flex flex-row navbar-light bg-light">
+        {/* <div className="col container-menu"> */}
+          {/* <nav className="col d-flex navbar navbar-light bg-light"> */}
+          <nav className="col d-flex navbar container-menu">
             <h5 className="d-flex titulo-menu">Tabela de Variantes</h5>
             <ul className="lista-de-botoes d-flex flex-row menu-list">
               <li className="item-lista">
@@ -353,11 +355,11 @@ export const TableOfVariants = () => {
               </li>
             </ul>
           </nav>
-        </div>
+        {/* </div> */}
       </div>
       {/* <main> */}
-      <div className="container-fluid pb-3 flex-grow-1 d-flex flex-column flex-sm-row overflow-auto ">
-        <div className="row flex-grow-sm-1 flex-grow-1 ">
+      <div className="container-fluid pb-3 flex-grow-1 d-flex flex-column overflow-auto">
+        <div className="row flex-grow-sm-1 flex-grow-1 table-and-filters">
           <main className="flex container-main">
             <div className="p-3 d-flex flex-wrap flex-row container-main">
               {/* Container de Filtros */}
@@ -507,7 +509,7 @@ export const TableOfVariants = () => {
               {/* Fim do Container de Filtros */}
 
               {variantsPage.length > 0 && visibleCols.size > 0 ? (
-                <div className="col d-flex flex-column variants-table">
+                <div className="col d-flex flex-column container-table">
                   <DataTable
                     variantsPage={variantsPage}
                     visibleColumns={visibleCols}

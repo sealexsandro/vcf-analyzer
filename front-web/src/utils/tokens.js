@@ -45,10 +45,19 @@ export const HeaderFieldsList = [
 ]
 
 export const VariantTypes = {
-    FULL_VARIANT_TYPE: 'fullVariantsTypes',
-    INDEL_VARIANT_TYPE: 'INDEL',
-    SNP_VARIANT_TYPE: 'SNP',
-    INSERCAO_VARIANT_TYPE: 'INS',
-    DELECAO_VARIANT_TYPE: 'DEL',
+    FULL_VARIANT_TYPE: 'allVariantsTypes',
+    INDEL_VARIANT_TYPE: 'indel',
+    SNP_VARIANT_TYPE: 'snp',
+    INSERCAO_VARIANT_TYPE: 'ins',
+    DELECAO_VARIANT_TYPE: 'del',
 }
+
+const VariantTypesCode ={
+    allVariantsTypes: 1,
+    snp: 2, 
+    indel: 3, 
+    
+}
+
+export const CodeVariantTypesMap = new Map(Object.entries(VariantTypesCode));
 // export default frameTypes;

@@ -83,7 +83,12 @@ public class VariantDto {
 
 		for (int i = 0; i < vectorInfo.length; i++) {
 			keyAndValueColInfo = vectorInfo[i].split("=");
-			infoColMap.put(keyAndValueColInfo[0], keyAndValueColInfo[1]);
+			
+			try {
+				infoColMap.put(keyAndValueColInfo[0], keyAndValueColInfo[1]);
+			} catch (ArrayIndexOutOfBoundsException err) {
+				infoColMap.put(keyAndValueColInfo[0], "");
+			}
 		}
 
 		return infoColMap;

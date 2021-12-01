@@ -1,4 +1,4 @@
-import axios from "../axiosConfig";
+import http from "../http-common";
 
 class UploadFileService{
 
@@ -7,7 +7,7 @@ class UploadFileService{
 
         formData.append("file", vcfFile);
 
-        return axios.post("/upload", formData, {
+        return http.post("/upload", formData, {
             headers:{
                 "Content-Type": "multipart/form-data",
                 'Access-Control-Allow-Origin': '*',

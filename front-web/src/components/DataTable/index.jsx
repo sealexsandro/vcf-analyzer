@@ -21,7 +21,7 @@ export const DataTable = ({
   return (
     <>
       {displayColsList.length > 0 && (
-        <div className="table-responsive-sm variant-table">
+        <div className="col d-flex flex-column variants-table">
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -47,28 +47,28 @@ export const DataTable = ({
               {variants?.map((data) => (
                 <tr key={data.index}>
                   {displayCols.get(HeaderFields.CHROM) && (
-                    <td className="text-table">{data.chrom}</td>
+                    <td className="text-table text-align">{data.chrom}</td>
                   )}
                   {displayCols.get(HeaderFields.POS) && (
-                    <td className="text-table">{data.position}</td>
+                    <td className="text-table text-align">{data.position}</td>
                   )}
                   {displayCols.get(HeaderFields.ID) && (
-                    <td className="text-table">{data.idVariant}</td>
+                    <td className="text-table text-align">{data.idVariant}</td>
                   )}
                   {displayCols.get(HeaderFields.REF) && (
-                    <td className="text-table">{data.reference}</td>
+                    <td className="text-table text-align">{data.reference}</td>
                   )}
                   {displayCols.get(HeaderFields.ALT) && (
-                    <td className="text-table">{data.alteration}</td>
+                    <td className="text-table text-align">{data.alteration}</td>
                   )}
                   {displayCols.get(HeaderFields.QUAL) && (
-                    <td className="text-table">{data.quality}</td>
+                    <td className="text-table text-align">{data.quality}</td>
                   )}
                   {displayCols.get(HeaderFields.FILTER) && (
                     <td className="text-table">{data.filter}</td>
                   )}
                   {displayCols.get(HeaderFields.FORMAT) && (
-                    <td className="text-table">{data.format}</td>
+                    <td className="text-table text-align">{data.format}</td>
                   )}
                   {displayCols.get(HeaderFields.SAMPLES) && (
                     <td className="text-table">

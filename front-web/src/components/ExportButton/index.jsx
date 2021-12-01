@@ -1,6 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ReactExport from "react-data-export";
+import http from "../../http-common";
+import vcfFileSession from "../../services/vcfFileSession";
 import { HeaderFields, VariantsAttribsMap } from "../../utils/tokens";
 
 const ExcelFile = ReactExport.ExcelFile;
@@ -44,8 +45,8 @@ export const ExportButton = ({
       }
     });
     console.log("Filtres: ", filters);
-    let requisicao = `http://localhost:8080/allvariantsbyfields?${filters}&idvcf=${1}`;
-    axios
+    let requisicao = `/allvariantsbyfields?${filters}&idvcf=${vcfFileSession.getIdVcf()}`;
+    http
       .get(requisicao)
       .then((response) => {
         const variants = response.data;
@@ -69,7 +70,7 @@ export const ExportButton = ({
             // infoCol: new Map(Object.entries(variant.infoCol)),
           };
           let fullVariant = Object.assign({}, halfVariant, variant.infoCol);
-          console.log(fullVariant);
+          // console.log(fullVariant);
           variantData[index] = fullVariant;
         });
         setVariants(variantData);
