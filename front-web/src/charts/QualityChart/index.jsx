@@ -2,7 +2,6 @@ import http from "../../http-common";
 import { useEffect, useState } from "react";
 import Barchart from "../../components/Charts/BarChart";
 import { DataSummaryOfChart } from "../DataSummaryOfChart";
-// import { Link } from "react-router-dom";
 
 import "../styles-global.css";
 import vcfFileSession from "../../services/vcfFileSession";
@@ -19,9 +18,6 @@ export const QualityChart = () => {
       },
     ],
   });
-  // const [categories, setCategories] = useState();
-  // const [data, setData] = useState([]);
-  // const [cont, setCont] = useState(0);
 
   useEffect(() => {
     http
@@ -43,16 +39,12 @@ export const QualityChart = () => {
           },
           series: [
             {
-              // name: (val) => {
-              //   return val;
-              // },
-              labels: ["lmml"],
+
+              labels: ["labels"],
               data: mySeries,
             },
           ],
         });
-        // setData(mySeries);
-        // console.log("Imprimiu AQUI 123");
       });
   }, []);
 

@@ -27,14 +27,6 @@ public class Statistics {
 		this.valorMaximo = Calculations.valorMaximo(numList);
 		this.boxPlot = new BoxPlot(numList);
 	}
-//
-//	public Statistics(List<Float> numList) {
-//		this.media = Calculations.media(numList);
-//		this.valorMinimo = Calculations.valorMinimo(numList);
-//		this.valorMaximo = Calculations.valorMaximo(numList);
-//		this.boxPlot = new BoxPlot(numList);
-//	}
-	
 
 	public float getMedia() {
 		return media;
@@ -63,4 +55,9 @@ public class Statistics {
 	public BoxPlot getBoxPlot() {
 		return boxPlot;
 	}
+
+	public String getIdTagHeaderName() {
+		return idTagHeaderName;
+	}
+	
 }

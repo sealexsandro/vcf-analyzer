@@ -19,18 +19,6 @@ export const StatisticsCharts = () => {
 
   const [dashComponent, setDashComponent] = useState(chartComponents.VARIANT_TYPES);
 
-  // const dashPageComponent = () => {
-  //   if (dashComponent === 0) {
-  //     return <QualityChart />;
-  //   }
-  //   if (dashComponent === 1) {
-  //     return <VariantTypesChart />;
-  //   }
-  //   if (dashComponent === 2) {
-  //     return <BoxPlot tagInfo={selectedTagInfo} />;
-  //   }
-  // };
-
   useEffect(() => {
     http
     .get(`/tagsInfobyidvcf?id=${vcfFileSession.getIdVcf()}`).then((response) => {

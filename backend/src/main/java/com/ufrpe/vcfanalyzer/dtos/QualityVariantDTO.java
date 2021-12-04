@@ -2,8 +2,6 @@ package com.ufrpe.vcfanalyzer.dtos;
 
 import java.io.Serializable;
 
-import com.ufrpe.vcfanalyzer.domain.Variant;
-
 public class QualityVariantDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

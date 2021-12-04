@@ -8,7 +8,6 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.Variant;
+import com.ufrpe.vcfanalyzer.domain.VariantFilters;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
@@ -33,7 +33,6 @@ import com.ufrpe.vcfanalyzer.repository.FileVcfRepository;
 import com.ufrpe.vcfanalyzer.repository.TagHeaderVcfRepository;
 import com.ufrpe.vcfanalyzer.repository.VariantRepository;
 import com.ufrpe.vcfanalyzer.statistics.Statistics;
-import com.ufrpe.vcfanalyzer.utils.VariantToken;
 import com.ufrpe.vcfanalyzer.vcfAnalisis.SummaryStatistics;
 import com.ufrpe.vcfanalyzer.vcfAnalisis.VcfAnalisis;
 
@@ -57,7 +56,6 @@ public class VcfStorageService {
 
 	@Transactional(readOnly = true)
 	public Page<VariantDto> findAll(Pageable pageable) {
-		// variantRepository.findAll();
 		Page<Variant> result = variantRepository.findAll(pageable);
 		return result.map(obj -> new VariantDto(obj));
 	}
@@ -99,10 +97,6 @@ public class VcfStorageService {
 		System.out.println("**************Arquivo Salvo No Banco****************");
 		return fileDataId;
 	}
-//
-//	public List<QualityVariantDTO> variantQualitySummary() {
-//		return this.variantRepository.summaryByQuality();
-//	}
 
 	public List<QualityVariantDTO> summaryOfVariantQuality(Integer idvcf) {
 		List<Double> listQuality = this.variantRepository.summaryOfVariantQuality(idvcf);
@@ -134,25 +128,25 @@ public class VcfStorageService {
 		return statistics.dpsStatistics(colInfos);
 	}
 
-	@Transactional
-	public Map<String, List<String>> getVariantsOfAttributesNotDuplicatesById(Integer idVcf) {
-
-		Map<String, List<String>> atributesMap = new HashMap<>();
-
-		List<String> chroms = variantRepository.getChromNotDuplicatesByIdVcf(idVcf);
-		List<String> references = variantRepository.getReferenceNotDuplicatesByIdVcf(idVcf);
-		List<String> alterations = variantRepository.getAlterationNotDuplicatesByIdVcf(idVcf);
-		List<String> qualities = variantRepository.getQualityNotDuplicatesByIdVcf(idVcf);
-		List<String> filters = variantRepository.getFilterNotDuplicatesByIdVcf(idVcf);
-
-		atributesMap.put(VariantToken.CHROM, chroms);
-		atributesMap.put(VariantToken.REF, references);
-		atributesMap.put(VariantToken.ALT, alterations);
-		atributesMap.put(VariantToken.QUAL, qualities);
-		atributesMap.put(VariantToken.FILTER, filters);
-
-		return atributesMap;
-	}
+//	@Transactional
+//	public Map<String, List<String>> getVariantsOfAttributesNotDuplicatesById(Integer idVcf) {
+//
+//		Map<String, List<String>> atributesMap = new HashMap<>();
+//
+//		List<String> chroms = variantRepository.getChromNotDuplicatesByIdVcf(idVcf);
+//		List<String> references = variantRepository.getReferenceNotDuplicatesByIdVcf(idVcf);
+//		List<String> alterations = variantRepository.getAlterationNotDuplicatesByIdVcf(idVcf);
+//		List<String> qualities = variantRepository.getQualityNotDuplicatesByIdVcf(idVcf);
+//		List<String> filters = variantRepository.getFilterNotDuplicatesByIdVcf(idVcf);
+//
+//		atributesMap.put(VariantToken.CHROM, chroms);
+//		atributesMap.put(VariantToken.REF, references);
+//		atributesMap.put(VariantToken.ALT, alterations);
+//		atributesMap.put(VariantToken.QUAL, qualities);
+//		atributesMap.put(VariantToken.FILTER, filters);
+//
+//		return atributesMap;
+//	}
 
 	// Metodo funcional com o banco Postgres
 //	public Map<String, Set<String>> getValuesInfoNotDuplicatesById(Integer idVcf) {
@@ -193,6 +187,12 @@ public class VcfStorageService {
 	public Page<VariantDto> findPageVariantsByFields(Map<String, String> filtersMap, Integer idvcf, Pageable pageable) {
 		Page<Variant> result = variantRepository.findPageVariantsByFilds(filtersMap, idvcf, pageable);
 		return result.map(obj -> new VariantDto(obj));
+	}
+
+	@Transactional
+	public VariantFilters findVariantFilters(Map<String, String> filtersMap, Integer idvcf) {
+		VariantFilters variantFilters = variantRepository.findAttributesUniqueOfVariants(filtersMap, idvcf);
+		return variantFilters;
 	}
 
 	@Transactional

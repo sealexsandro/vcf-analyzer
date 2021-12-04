@@ -25,23 +25,10 @@ export const VariantTypesChart = () => {
         const result = response.data;
 
         const { snp, indel } = result;
-
-        // const variacoes = [];
-        // result.forEach((variacao, index) => {
-        //   variacoes[index] = {
-        //     index: index,
-        //     snp: variacao.snp,
-        //     indel: variacao.indel,
-        //     type: tag.type,
-        //     description: tag.description,
-        //   };
-        // });
-
         console.log(snp);
         console.log(indel);
         const mySeries = [snp, indel];
         const myLabels = ["SNPs", "INDELs"];
-        //     const myLabels = data.map((x) => x.quality.toString());
         setSnps(snp);
         setIndels(indels);
         setChartData({

@@ -2,7 +2,6 @@ import { useState } from "react";
 import UploadFileService from "../../services/upload-vcf";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
-import VcfAnalized from "../../services/vcfFileSession";
 import vcfFileSession from "../../services/vcfFileSession";
 
 export const UploadFile = () => {

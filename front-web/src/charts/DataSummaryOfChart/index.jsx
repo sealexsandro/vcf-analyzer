@@ -5,7 +5,6 @@ import "../styles-global.css";
 export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
   // console.log(tagInfoCol);
   const tagInfo = tagInfoCol;
-  // const [dataName, setDataName] = useState("");
   const [media, setMedia] = useState(0);
   const [mediana, setMediana] = useState(0);
   const [valorMinimo, setValorMinimo] = useState(0);

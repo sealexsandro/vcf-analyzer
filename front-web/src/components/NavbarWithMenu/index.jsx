@@ -21,9 +21,6 @@ export const NavBarWithMenu = () => {
           </Link>
         </nav>
       </div>
-      {/* <div className="container-fluid d-flex  div-navbar">
-       
-      </div> */}
     </div>
   );
 };

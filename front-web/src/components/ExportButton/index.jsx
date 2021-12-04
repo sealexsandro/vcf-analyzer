@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ReactExport from "react-data-export";
+import ReactExport from "react-export-excel";
 import http from "../../http-common";
 import vcfFileSession from "../../services/vcfFileSession";
 import { HeaderFields, VariantsAttribsMap } from "../../utils/tokens";
@@ -18,7 +18,6 @@ export const ExportButton = ({
   const columnHeaders = Array.from(headers);
   const columnHeadersInfo = Array.from(headersInfo);
   const [variants, setVariants] = useState([]);
-  const [exportar, setExportar] = useState(false);
   const initValueOption = "-----";
 
   useEffect(() => {
@@ -82,11 +81,6 @@ export const ExportButton = ({
     // }
   }, [tableFilters]);
 
-  const ativarExport = () => {
-    console.log("Export: ", exportar);
-    setExportar(true);
-  };
-
   const columns = () => {
     let columns = [];
     // if (allColumns.length <= 0) return;
@@ -98,7 +92,6 @@ export const ExportButton = ({
             value={VariantsAttribsMap.get(header[0])}
           />
         );
-      // columnNames.push(column.name)
     });
     columnHeadersInfo.forEach((header) => {
       header[1] &&
@@ -113,13 +106,12 @@ export const ExportButton = ({
       element={
         <button
           className="btn btn-md btn-primary shadow-none butao"
-          // onClick={() => ativarExport()}
         >
           Exportar
         </button>
       }
     >
-      <ExcelSheet data={variants} name={fileName}>
+      <ExcelSheet data={variants} name="variantsDownload">
         {columns()}
       </ExcelSheet>
     </ExcelFile>

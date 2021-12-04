@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ufrpe.vcfanalyzer.domain.VariantFilters;
 import com.ufrpe.vcfanalyzer.domain.Variant;
 
 public interface VariantRepositoryCustom {
@@ -14,5 +15,9 @@ public interface VariantRepositoryCustom {
 
 	List<Variant> findAllVariantsByFields(Map<String, String> filtersMap, Integer idvcf);
 
-//	Page<Variant> getVariantsByFilds(String queryCustom, Pageable pageable);
+//	/*
+//	 * Buscar os campos de Filtros não duplicados das variantes
+//	 */
+	VariantFilters findAttributesUniqueOfVariants(Map<String, String> filtersMap, Integer idvcf);
+//	
 }

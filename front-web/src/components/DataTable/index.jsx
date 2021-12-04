@@ -26,17 +26,17 @@ export const DataTable = ({
             <thead>
               <tr>
                 {displayColsList.map(
-                  (header) =>
+                  (header, index) =>
                     header[1] && (
-                      <th scope="col" className="text-center text-table">
+                      <th scope="col" className="text-center text-table" key={index}>
                         {header[0]}
                       </th>
                     )
                 )}
                 {displayColsInfoList.map(
-                  (header) =>
+                  (header, index) =>
                     header[1] && (
-                      <th scope="col" className="text-center text-table">
+                      <th scope="col" className="text-center text-table" key={index}>
                         {header[0]}
                       </th>
                     )
@@ -44,8 +44,8 @@ export const DataTable = ({
               </tr>
             </thead>
             <tbody>
-              {variants?.map((data) => (
-                <tr key={data.index}>
+              {variants?.map((data, index) => (
+                <tr key={index}>
                   {displayCols.get(HeaderFields.CHROM) && (
                     <td className="text-table text-align">{data.chrom}</td>
                   )}
@@ -80,10 +80,10 @@ export const DataTable = ({
                     </td>
                   )}
                   {displayColsInfoList.map(
-                    (field) =>
+                    (field, indexField) =>
                       field[1] && (
-                        <th scope="col" className="text-center text-table">
-                          <td className="text-table">
+                        <th scope="col" className="text-center text-table" key={indexField}>
+                          <td className="text-table" key={indexField}>
                             {data.infoCol.get(field[0])}
                           </td>
                         </th>

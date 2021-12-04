@@ -14,10 +14,7 @@ export default function Barchart({
   };
 
   const options = {
-    // chart: {
-    //   height: 500,
-    //   type: "bar",
-    // },
+
       plotOptions: {
       bar: {
         // horizontal: true,

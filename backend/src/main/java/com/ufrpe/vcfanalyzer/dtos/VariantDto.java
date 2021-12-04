@@ -7,6 +7,7 @@ import com.ufrpe.vcfanalyzer.domain.Variant;
 
 public class VariantDto {
 
+	
 	private String chrom;
 	private Integer position;
 	private String idVariant;
@@ -16,9 +17,8 @@ public class VariantDto {
 	private String filter;
 	private Map<String, String> infoCol;
 	private String format;
-//	private Map<String, String> samples;
-
 	private String samples;
+	
 
 	public VariantDto() {
 	}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react/cjs/react.development";
 import { BoxPlot } from "../../components/Charts/Boxplot";
 import { DataSummaryOfChart } from "../DataSummaryOfChart";
 import { CodeVariantTypesMap } from "../../utils/tokens";
+import vcfFileSession from "../../services/vcfFileSession";
 
 export const BoxplotInfoTag = ({ tagInfo }) => {
   const { tagField } = tagInfo;
@@ -14,7 +15,7 @@ export const BoxplotInfoTag = ({ tagInfo }) => {
   useEffect(() => {
     // console.log(tagField)
     http
-      .get(`/info-statistics?field_info=${tagField}&id=${1}`) // mudar essa requisicao
+      .get(`/info-statistics?field_info=${tagField}&id=${vcfFileSession.getIdVcf()}`) // mudar essa requisicao
       .then((response) => {
         const results = response.data;
         const statisticsOfHeaderTag = [];

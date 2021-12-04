@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
+import com.ufrpe.vcfanalyzer.domain.VariantFilters;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.dtos.SumaryStatisticsColumnINFO;
 import com.ufrpe.vcfanalyzer.dtos.VariantDto;
@@ -36,16 +37,8 @@ public class FileController {
 			throws IllegalStateException, IOException {
 
 		Integer fileDataId = vcfService.saveFile(multipart);
-
-//		return ResponseEntity.noContent().build();
 		return ResponseEntity.ok(fileDataId);
 	}
-
-//	@GetMapping(value = "/files")
-//	public ResponseEntity<Page<VariantDto>> findAllVariants(Pageable pageable) {
-//		Page<VariantDto> list = vcfService.findAll(pageable);
-//		return ResponseEntity.ok(list);
-//	}
 
 	@GetMapping(value = "/allvariants", params = "idvcf")
 	public ResponseEntity<List<VariantDto>> findAllVariantsByVcfId(@RequestParam Integer idvcf) {
@@ -91,12 +84,20 @@ public class FileController {
 		return ResponseEntity.ok(list);
 	}
 
-	@GetMapping(value = "/variants-by-unique-attributes", params = "id")
-	public ResponseEntity<Map<String, List<String>>> getVariantsOfAttributesNotDuplicates(@RequestParam Integer id) {
-		Map<String, List<String>> atributesMap = vcfService.getVariantsOfAttributesNotDuplicatesById(id);
-		return ResponseEntity.ok(atributesMap);
+//	@GetMapping(value = "/variants-by-unique-attributes", params = "id")
+//	public ResponseEntity<Map<String, List<String>>> getVariantsOfAttributesNotDuplicates(@RequestParam Integer id) {
+//		Map<String, List<String>> atributesMap = vcfService.getVariantsOfAttributesNotDuplicatesById(id);
+//		return ResponseEntity.ok(atributesMap);
+//	}
+//	
+	
+	@GetMapping(value = "/variants-filters")
+	public ResponseEntity<VariantFilters> findAttributesUniqueOfVariants(@RequestParam Map<String, String> filtersMap,
+			@RequestParam Integer idvcf) {
+		VariantFilters variantFilters = vcfService.findVariantFilters(filtersMap, idvcf);
+		return ResponseEntity.ok(variantFilters);
 	}
-
+	
 	@GetMapping(value = "/info-attributes", params = "id")
 	public ResponseEntity<Map<String, Set<String>>> getValuesInfoNotDuplicatesById(@RequestParam Integer id)
 			throws SQLException, IOException {

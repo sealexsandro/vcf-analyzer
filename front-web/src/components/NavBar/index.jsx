@@ -13,20 +13,6 @@ const NavBar = () => {
         </Link>
       </div>
     </div>
-    // <nav className="navbar navbar-expand-lg navbar-geral">
-    //   <Link
-    //     to="/"
-    //     className="container-fluid justify-content-start navbar-brand logo"
-    //   >
-    //     <img
-    //       src={"/images/analise.png"}
-    //       alt="analyzer"
-    //       width="60"
-    //       className=""
-    //     />
-    //     <h3 className="tituloLogo">VCF Analyzer</h3>
-    //   </Link>
-    // </nav>
   );
 };
 
