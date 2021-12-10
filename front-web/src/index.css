@@ -8,15 +8,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* .container{
-  margin-left: 1rem;
-} */
-
 [class*="container-fluid"] {
   padding-left: 20px;
   padding-right: 20px;
-  
 }
+
 [class*="container-fluid"] {
   /* border: 1px dashed yellow; */
   background-clip: content-box;

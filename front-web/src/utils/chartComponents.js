@@ -4,3 +4,8 @@ export const chartComponents = {
     VARIANT_TYPES: "variantTypes",
     INFO_STATISTICS: "infoStatistics",
 }
+
+export const chartTypes = {
+    BOXPLOT: "boxPlot",
+    PIECHART: "pieChart",
+}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ufrpe.vcfanalyzer.domain.InfoDataSummary;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.VariantFilters;
 import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
@@ -76,6 +77,13 @@ public class FileController {
 			@RequestParam Integer id) {
 		List<Statistics> infoStatistics = vcfService.statisticsFieldInfo(field_info, id);
 		return ResponseEntity.ok(infoStatistics);
+	}
+	
+	@GetMapping(value = "/info-summary", params = { "field_info", "id" })
+	public ResponseEntity<List<InfoDataSummary>> summaryFieldInfo(@RequestParam String field_info,
+			@RequestParam Integer id) {
+		List<InfoDataSummary> infoSummary = vcfService.summaryInfoData(field_info, id);
+		return ResponseEntity.ok(infoSummary);
 	}
 
 	@GetMapping(value = "/dps-statistics")

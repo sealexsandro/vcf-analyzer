@@ -61,5 +61,22 @@ public class Calculations {
 		}
 		return 0;
 	}
+	
+//	public static float contEqualsNumbers(float number, List<Float> numList) {
+//		
+//		if (numList.size() > 0) {
+//			Collections.sort(numList);
+//
+//			float medianValue = 0;
+//			// lista com quantidade de elementos = n, onde n é par
+//			if (numList.size() % 2 == 0) {
+//				medianValue = (numList.get(middle - 1) + numList.get(middle)) / 2;
+//			} else {
+//				medianValue = numList.get(middle);
+//			}
+//			return medianValue;
+//		}
+//		return 0;
+//	}
 
 }

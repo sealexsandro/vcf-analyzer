@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
+import com.ufrpe.vcfanalyzer.domain.InfoDataSummary;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.Variant;
 import com.ufrpe.vcfanalyzer.domain.VariantFilters;
@@ -120,6 +121,7 @@ public class VcfStorageService {
 		List<Statistics> infoStatistics = vcfAnalisis.statisticsFieldInfo(fieldInfo, variantsResult);
 		return infoStatistics;
 	}
+	
 
 	public List<SumaryStatisticsColumnINFO> dpsStatistics() {
 		List<Variant> variants = variantRepository.findAll();
@@ -201,6 +203,12 @@ public class VcfStorageService {
 		List<VariantDto> variantsDto = variantsResult.stream().map(variant -> new VariantDto(variant))
 				.collect(Collectors.toList());
 		return variantsDto;
+	}
+	
+	public List<InfoDataSummary> summaryInfoData(String fieldInfo, Integer idvcf) {
+		List<Variant> variantsResult = variantRepository.findAllVariantsByVcfId(idvcf);
+		List<InfoDataSummary> infoData = vcfAnalisis.summaryFieldInfo(fieldInfo, variantsResult);
+		return infoData;
 	}
 
 }

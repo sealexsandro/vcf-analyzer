@@ -17,25 +17,31 @@ export const StatisticsCharts = () => {
     description: "",
   });
 
-  const [dashComponent, setDashComponent] = useState(chartComponents.VARIANT_TYPES);
+  const [dashComponent, setDashComponent] = useState(
+    chartComponents.VARIANT_TYPES
+  );
 
   useEffect(() => {
     http
-    .get(`/tagsInfobyidvcf?id=${vcfFileSession.getIdVcf()}`).then((response) => {
-      const results = response.data;
+      .get(`/tagsInfobyidvcf?id=${vcfFileSession.getIdVcf()}`)
+      .then((response) => {
+        const results = response.data;
 
-      const tagsInfo = [];
-      results.forEach((tag, index) => {
-        tagsInfo[index] = {
-          index: index,
-          tagField: tag.idTag,
-          number: tag.number,
-          type: tag.type,
-          description: tag.description,
-        };
+        const tagsInfo = [];
+        results.forEach((tag, index) => {
+          let type = tag.type;
+          if (type.toLowerCase() !== "string") {
+            tagsInfo[index] = {
+              index: index,
+              tagField: tag.idTag,
+              number: tag.number,
+              type: tag.type,
+              description: tag.description,
+            };
+          }
+        });
+        setDataTagsInfo(tagsInfo);
       });
-      setDataTagsInfo(tagsInfo);
-    });
   }, []);
 
   const pegou = () => {
@@ -57,7 +63,7 @@ export const StatisticsCharts = () => {
       {/* <NavBar /> */}
       <NavBarWithMenu />
       {/* <SubMenu /> */}
-      <div className="container-fluid pb-3 flex-grow-1 d-flex flex-column flex-sm-row overflow-auto ">
+      <div className="container-fluid pb-3 pt-2  flex-grow-1 d-flex flex-column flex-sm-row overflow-auto ">
         <div className="row flex-grow-sm-1 flex-grow-1 ">
           <aside className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0 pb-3 col-aside">
             <div className="bg-light border rounded-3 p-1 h-100 sticky-top">
@@ -66,36 +72,40 @@ export const StatisticsCharts = () => {
                 className="d-flex justify-content-center align-items-center pb-2  text-black text-decoration-none "
               >
                 <span className="fs-5 d-sm-inline text-truncate">
-                  Estatísticas
+                  <b>Gráficos</b>
                 </span>
               </div>
               <ul className="nav nav-pills flex-sm-column flex-row flex-nowrap  justify-content-center">
-              <li className="">
+                <li className="">
                   <button
-                    className="nav-link px-2 "
-                    onClick={() => setDashComponent(chartComponents.VARIANT_TYPES)}
+                    className="nav-link px-2 text-black"
+                    onClick={() =>
+                      setDashComponent(chartComponents.VARIANT_TYPES)
+                    }
                   >
-                    Tipos de Variações
+                    Variants Types
                   </button>
                 </li>
                 <li className="">
                   <button
-                    className="nav-link px-2 "
-                    onClick={() => setDashComponent(chartComponents.VARIANT_QUALITY)}
+                    className="nav-link px-2  text-black"
+                    onClick={() =>
+                      setDashComponent(chartComponents.VARIANT_QUALITY)
+                    }
                   >
-                    Quality de Variações
+                    Quality distribution
                   </button>
                 </li>
-        
-                <li className="dropdown">
+
+                <li className="dropdown  text-black">
                   <Link
                     to="#"
-                    className="nav-link dropdown-toggle px-2 text-truncate"
+                    className="nav-link dropdown-toggle px-2 text-truncate  text-black"
                     id="dropdown-li"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <span className="" onClick={pegou}>
+                    <span className="text-black" onClick={pegou}>
                       Info Statistics
                     </span>
                   </Link>
@@ -120,8 +130,10 @@ export const StatisticsCharts = () => {
           </aside>
           <main className="col charts flex overflow-auto border h-100 box-main">
             {/* {dashPageComponent(dashComponent)} */}
-            <StatisticsMenu chartComponent={dashComponent} tagInfo={selectedTagInfo}/>
-
+            <StatisticsMenu
+              chartComponent={dashComponent}
+              tagInfo={selectedTagInfo}
+            />
           </main>
         </div>
       </div>

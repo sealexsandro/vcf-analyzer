@@ -57,11 +57,11 @@ export const VariantTypesChart = () => {
         />
       </div>
       {/* <DataSummaryOfChart /> */}
-      <div className="border h-100 box-statistics-data movable-bar">
+      <div className="border h-100 box-statistics-data movable-bar p-3">
         <>
           <div className="d-flex justify-content-center align-items-center py-1 ">
             <span className="fs-6 text-truncate py-0">
-              <b>Estatísticas</b>
+              <b>Informations</b>
             </span>
           </div>
           <hr />
@@ -70,7 +70,7 @@ export const VariantTypesChart = () => {
               <li className="">
                 <div>
                   <span className="">
-                    <b>Número de SNPs:</b>{" "}
+                    <b>Number of SNPs:</b>{" "}
                   </span>
                   <span className="">{snps}</span>
                 </div>
@@ -79,7 +79,7 @@ export const VariantTypesChart = () => {
               <li className="">
                 <div>
                   <span className="">
-                    <b>Número de Indels:</b>{" "}
+                    <b>Number of Indels:</b>{" "}
                   </span>
                   <span className="">{indels}</span>
                 </div>

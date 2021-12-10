@@ -2,6 +2,7 @@ import { chartComponents } from "../../utils/chartComponents";
 import { QualityChart } from "../QualityChart";
 import { VariantTypesChart } from "../VariantTypesChart";
 import { BoxplotInfoTag } from "../BoxplotInfoTags";
+import { InfoCharts } from "../InfoCharts";
 
 export const StatisticsMenu = ({ chartComponent, tagInfo }) => {
 
@@ -15,7 +16,8 @@ export const StatisticsMenu = ({ chartComponent, tagInfo }) => {
       }
       case chartComponents.INFO_STATISTICS: {
         console.log("Chamou BoxPlot")
-        return <BoxplotInfoTag tagInfo={tagInfo} />;
+        // return <BoxplotInfoTag tagInfo={tagInfo} />;
+        return <InfoCharts tagInfo={tagInfo} />;
       }
       default:
         throw new Error("ChartComponent is not defined");

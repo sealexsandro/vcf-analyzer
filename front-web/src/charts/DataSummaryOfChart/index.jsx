@@ -26,18 +26,18 @@ export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
   }, [statistics]);
 
   return (
-    <div className="border h-100 box-statistics-data movable-bar">
+    <div className="border h-100 box-statistics-data movable-bar p-3">
       {tagInfo && (
         <>
           <div className="d-flex justify-content-center align-items-center pb-2 ">
             <span className="fs-6 text-truncate">
-              <b>Estatísticas de {tagInfo.tagField}</b>
+              <b>Statistics of all {tagInfo.tagField}s</b>
             </span>
           </div>
           <hr />
           <div>
             <p>
-              <b> Descrição de {tagInfo.tagField}:</b> {tagInfo.description}
+              <b> Description of {tagInfo.tagField}:</b> {tagInfo.description}
             </p>
           </div>
           <ul className="nav nav-pills flex-sm-column flex-row flex-nowrap  justify-content-center">
@@ -46,7 +46,7 @@ export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
                 <li className="">
                   <div>
                     <span className="">
-                      <b>Media de todos os {tagInfo.tagField}s:</b>{" "}
+                      <b>Average of all {tagInfo.tagField}s:</b>{" "}
                     </span>
                     <span className="">{media}</span>
                   </div>
@@ -55,7 +55,7 @@ export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
                 <li className="">
                   <div>
                     <span className="">
-                      <b>Mediana de todos os {tagInfo.tagField}s:</b>{" "}
+                      <b>Median of all {tagInfo.tagField}s:</b>{" "}
                     </span>
                     <span className="">{mediana}</span>
                   </div>
@@ -64,7 +64,7 @@ export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
                 <li className="">
                   <div>
                     <span className="">
-                      <b>Valor Maximo de {tagInfo.tagField}s:</b>{" "}
+                      <b>Highest value of {tagInfo.tagField}:</b>{" "}
                     </span>
                     <span className="">{valorMaximo}</span>
                   </div>
@@ -73,7 +73,7 @@ export const DataSummaryOfChart = ({ statistics, tagInfoCol }) => {
                 <li className="">
                   <div>
                     <span className="">
-                      <b>Valor Minimo de {tagInfo.tagField}s:</b>{" "}
+                      <b>Lower value of {tagInfo.tagField}:</b>{" "}
                     </span>
                     <span className="">{valorMinimo}</span>
                   </div>

@@ -10,7 +10,7 @@ export function Home() {
       <div className="container-fluid container-uploadPage">
         <div className="d-flex align-items-center flex-column">
           <h2 className="">
-            Faça o Upload de arquivos VCFs e gere Análises Detalhadas:{" "}
+            Selecione arquivos VCFs e gere análises:{" "}
           </h2>
           {/* <button className="btn btn-primary btn-lg">Upload</button> */}
           <div className="div-upload">

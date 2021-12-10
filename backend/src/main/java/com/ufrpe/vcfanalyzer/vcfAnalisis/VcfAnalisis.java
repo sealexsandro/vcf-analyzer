@@ -5,18 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
 import com.ufrpe.vcfanalyzer.domain.FileVcfData;
+import com.ufrpe.vcfanalyzer.domain.InfoDataSummary;
 import com.ufrpe.vcfanalyzer.domain.TagHeader;
 import com.ufrpe.vcfanalyzer.domain.Variant;
+import com.ufrpe.vcfanalyzer.dtos.QualityVariantDTO;
 import com.ufrpe.vcfanalyzer.statistics.Statistics;
 import com.ufrpe.vcfanalyzer.utils.VariantToken;
 
@@ -27,6 +31,7 @@ public class VcfAnalisis {
 //	private int numeroDeColunas = 0;
 	private List<String> headerOfSamples;
 	private List<String> headers;
+	private int qntDeVariacoes = 0;
 
 	public VcfAnalisis() {
 
@@ -182,10 +187,10 @@ public class VcfAnalisis {
 			} else if (header.equalsIgnoreCase("QUAL")) {
 				try {
 					quality = Double.parseDouble(rowData[indexHeader]);
-				}catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					quality = 0D;
 				}
-				
+
 			} else if (header.equalsIgnoreCase("FILTER")) {
 				filter = rowData[indexHeader];
 			} else if (header.equalsIgnoreCase("INFO")) {
@@ -202,10 +207,10 @@ public class VcfAnalisis {
 			if (!rowData[indexHeader].equals(".")) {
 				// samples.put(this.columnSamples.get(colunaSamples), rowData[colunaSamples]);
 				String samp = headerSample + "===" + rowData[indexHeader];
-				if(!samples.equalsIgnoreCase("")) {
+				if (!samples.equalsIgnoreCase("")) {
 					samples = samples.concat("&&").concat(samp);
-				}else {
-					samples = samples.concat(samp);				
+				} else {
+					samples = samples.concat(samp);
 				}
 //				System.out.println(samples);
 			}
@@ -270,7 +275,7 @@ public class VcfAnalisis {
 				keyAndValue = vectorInfo[i].split("=");
 
 				if (keyAndValuesMap.containsKey(keyAndValue[0])) {
-					
+
 					String value = "";
 					try {
 						value = keyAndValue[1];
@@ -365,7 +370,7 @@ public class VcfAnalisis {
 			if (keyAndValueColInfo[0].equalsIgnoreCase(singleFieldInfo)) {
 				try {
 					float value = Float.parseFloat(keyAndValueColInfo[1]);
-					System.out.println("Valor de DP: "+value);
+					System.out.println("Valor de DP: " + value);
 					return value;
 				} catch (Exception err) {
 					System.out.println("Deu Erro na conversão de string para float, linha 259 da classe VCFAnalisis");
@@ -383,6 +388,7 @@ public class VcfAnalisis {
 		float valueOfFieldInfo = 0;
 		String tipoVariacao = "";
 		valuesOfFieldInfoOfVariantType.put(VariantToken.FULL_VARIANTS_TYPES, new ArrayList<>());
+		this.qntDeVariacoes = 0;
 
 		for (Variant v : variants) {
 			tipoVariacao = analizeTipoDeVariacao(v.getReference(), v.getAlteration());
@@ -393,6 +399,7 @@ public class VcfAnalisis {
 			if (valuesOfFieldInfoOfVariantType.containsKey(tipoVariacao)) {
 				valuesOfFieldInfoOfVariantType.get(tipoVariacao).add(valueOfFieldInfo);
 			} else {
+				this.qntDeVariacoes++;
 				valuesOfFieldInfoOfVariantType.put(tipoVariacao, new ArrayList<>());
 				valuesOfFieldInfoOfVariantType.get(tipoVariacao).add(valueOfFieldInfo);
 			}
@@ -410,6 +417,26 @@ public class VcfAnalisis {
 		}
 
 		return fullStatistics;
+	}
+
+	public List<InfoDataSummary> summaryFieldInfo(String fieldInfo, List<Variant> variants) {
+
+		Map<String, List<Float>> valuesMap = getValuesOfFieldInfoOfVariantType(fieldInfo, variants);
+		List<InfoDataSummary> infoDataSummary = new ArrayList<>();
+		for (Entry<String, List<Float>> entry : valuesMap.entrySet()) {
+			String variacao = entry.getKey();
+			if(variacao.equalsIgnoreCase(VariantToken.FULL_VARIANTS_TYPES) && this.qntDeVariacoes <= 1) {
+				continue;
+			}
+			Set<Float> setInfoData = new HashSet<Float>(entry.getValue());
+	
+			List<InfoDataSummary> infoDatas = setInfoData.stream().map(item -> new InfoDataSummary(fieldInfo,
+					entry.getKey(), item, Collections.frequency(entry.getValue(), item))).collect(Collectors.toList());
+
+			infoDataSummary.addAll(infoDatas);
+		}
+
+		return infoDataSummary;
 	}
 
 }
